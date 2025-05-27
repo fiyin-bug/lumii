@@ -2,10 +2,10 @@ import React, { useState } from "react";
 
 const FeaturedCollections = () => {
   const collections = [
-    { id: 1, name: "Diamond Elegance Ring", price: "$299", image: "https://public.readdy.ai/ai/img_res/37d76dcac29823532d29c37a91a15efc.jpg" },
-    { id: 2, name: "Pearl Cascade Necklace", price: "$249", image: "https://public.readdy.ai/ai/img_res/ef8e7de696c71c5fb4e0af02cbfe8ee5.jpg" },
-    { id: 3, name: "Rose Gold Hoop Earrings", price: "$179", image: "https://public.readdy.ai/ai/img_res/1f7d036d7e6fb0da862516bbc681c4cf.jpg" },
-    { id: 4, name: "Crystal Tennis Bracelet", price: "$219", image: "https://public.readdy.ai/ai/img_res/d0ce48ba9fc3b7e3200cf4baf46d0fe6.jpg" },
+    { id: 1, name: "Green Bracelet", price: "$299", image: "src/images/bracelet1.jpg" },
+    { id: 2, name: "Pink Bracelet", price: "$249", image: "src/images/bracelet2.jpg" },
+    { id: 3, name: "Solitaire Diamond Ring", price: "$179", image: "src/images/ring1.jpg" },
+    { id: 4, name: "Vintage Style Cluster Ring", price: "$219", image: "src/images/ring2.jpg" },
   ];
 
   const [activeCategory, setActiveCategory] = useState(0);

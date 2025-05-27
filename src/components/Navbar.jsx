@@ -32,7 +32,7 @@ const Navbar = () => {
         {/* Logo/Brand Name */}
         <div className="flex items-center">
          <Link to="/" className="text-2xl font-serif font-bold text-[#f4b8da]" onClick={closeMobileMenu}>
-            Lumis Pretty Collection
+            LumisPrettyCollection
           </Link>
         </div>
 
@@ -73,8 +73,8 @@ const Navbar = () => {
             )}
           </div>
            {/* --- Other Links --- */}
-          <NavLink to="/gift-combo" className={({ isActive }) => isActive ? "text-[#f4b8da]" : "text-gray-700 hover:text-[#f4b8da]"} >
-            Gift Combo
+          <NavLink to="/luxury hair" className={({ isActive }) => isActive ? "text-[#f4b8da]" : "text-gray-700 hover:text-[#f4b8da]"} >
+           Luxury Hair
           </NavLink>
            <NavLink to="/about" className={({ isActive }) => isActive ? "text-[#f4b8da]" : "text-gray-700 hover:text-[#f4b8da]"}>
             About Us
@@ -146,7 +146,7 @@ const Navbar = () => {
               )}
             </div>
             {/* Other Mobile Links */}
-            <Link to="/gift-combo" className="text-gray-700 hover:text-[#f4b8da]" onClick={closeMobileMenu}>
+            <Link to="/luxury hair" className="text-gray-700 hover:text-[#f4b8da]" onClick={closeMobileMenu}>
               Gift Combo
             </Link>
             <Link to="/about" className="text-gray-700 hover:text-[#f4b8da]" onClick={closeMobileMenu}>

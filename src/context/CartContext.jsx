@@ -1,6 +1,7 @@
 // src/context/CartContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import toast from 'react-hot-toast'; // <-- Import toast
+import toast from 'react-hot-toast';
+import { debounce } from 'lodash';
 
 const CartContext = createContext();
 
@@ -8,95 +9,97 @@ export const useCart = () => {
   return useContext(CartContext);
 };
 
-// Helper to get cart from local storage
 const getInitialCart = () => {
-    const savedCart = localStorage.getItem('cartItems');
-    return savedCart ? JSON.parse(savedCart) : [];
-}
+  const savedCart = localStorage.getItem('cartItems');
+  const cart = savedCart ? JSON.parse(savedCart) : [];
+  return cart.map((item) => ({
+    ...item,
+    image: item.image && !item.image.startsWith('/images/') ? `/images/${item.image}` : item.image
+  }));
+};
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(getInitialCart); // Load cart from localStorage
+  const [cartItems, setCartItems] = useState(getInitialCart);
 
-  // Save cart to local storage whenever it changes
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const addToCart = debounce((productToAdd) => {
+    if (!productToAdd.id || !productToAdd.name || !productToAdd.price || !productToAdd.image) {
+      toast.error('Invalid product data.');
+      return;
+    }
 
-  const addToCart = (productToAdd) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === productToAdd.id);
-
       if (existingItem) {
-        // Increase quantity if item already exists
-        toast.success(`${productToAdd.name} quantity updated!`); // Notify quantity update
+        toast.success(`${productToAdd.name} quantity updated!`);
         return prevItems.map((item) =>
           item.id === productToAdd.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        // Add new item with quantity 1
-        toast.success(`${productToAdd.name} added to cart!`); // Success toast
-        return [...prevItems, { ...productToAdd, quantity: 1 }];
+        toast.success(`${productToAdd.name} added to cart!`);
+        const imagePath = productToAdd.image.startsWith('/images/')
+          ? productToAdd.image
+          : `/images/${productToAdd.image}`;
+        return [...prevItems, { ...productToAdd, image: imagePath, quantity: 1 }];
       }
     });
-  };
+  }, 300);
 
-  const removeFromCart = (productId) => {
-     setCartItems((prevItems) => {
-         const itemToRemove = prevItems.find(item => item.id === productId);
-         if(itemToRemove) {
-            toast.error(`${itemToRemove.name} removed from cart.`); // Use error style for removal
-         }
-         return prevItems.filter((item) => item.id !== productId);
-     });
-  };
+  const removeFromCart = debounce((productId) => {
+    setCartItems((prevItems) => {
+      const itemToRemove = prevItems.find((item) => item.id === productId);
+      if (itemToRemove) {
+        toast.error(`${itemToRemove.name} removed from cart.`);
+      }
+      return prevItems.filter((item) => item.id !== productId);
+    });
+  }, 300);
 
   const updateQuantity = (productId, amount) => {
-      setCartItems((prevItems) =>
-          prevItems.map((item) => {
-              if (item.id === productId) {
-                  const newQuantity = item.quantity + amount;
-                  // Prevent quantity <= 0
-                  if (newQuantity > 0) {
-                      return { ...item, quantity: newQuantity };
-                  } else {
-                     // If quantity becomes 0 or less, filter it out (same as removing)
-                     // No separate toast needed here as removeFromCart handles it if called
-                     return null; // Mark for removal
-                  }
-              }
-              return item;
-          }).filter(item => item !== null) // Remove items marked as null
-      );
-      // Optional: Add a generic "Cart updated" toast if needed, but +/- actions might not require it.
+    setCartItems((prevItems) =>
+      prevItems
+        .map((item) => {
+          if (item.id === productId) {
+            const newQuantity = item.quantity + amount;
+            if (newQuantity > 0) {
+              return { ...item, quantity: newQuantity };
+            }
+            return null;
+          }
+          return item;
+        })
+        .filter((item) => item !== null)
+    );
   };
 
   const clearCart = () => {
     setCartItems([]);
     localStorage.removeItem('cartItems');
-    toast.success("Cart cleared!");
+    toast.success('Cart cleared!');
   };
 
-
   const getCartCount = () => {
-    // Sum up the quantities of all items in the cart
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
   const getCartSubtotal = () => {
-      return cartItems.reduce((total, item) => {
-          // Ensure price is a number, remove '$' and convert
-          const price = parseFloat(item.price.replace(/[^0-9.-]+/g,""));
-          if (!isNaN(price)) {
-              return total + price * item.quantity;
-          }
-          return total; // Skip if price is invalid
-      }, 0);
-  }
+    return cartItems.reduce((total, item) => {
+      const price = typeof item.price === 'string'
+        ? parseFloat(item.price.replace(/[^0-9.-]+/g, ''))
+        : parseFloat(item.price);
+      if (!isNaN(price)) {
+        return total + price * item.quantity;
+      }
+      console.warn(`Invalid price for item ${item.id}: ${item.price}`);
+      return total;
+    }, 0);
+  };
 
-  // Provide the state and functions through context
   const value = {
     cartItems,
     addToCart,

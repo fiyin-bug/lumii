@@ -9,6 +9,8 @@ import CartPage from "../src/components/CartPage";             // Updated path b
 import OrderStatusPage from "./pages/OrderStatusPage"; // <-- Import the combined status page
 import Footer from "./components/Footer";           // Optional: Ensure path is correct
 import { Toaster } from 'react-hot-toast';
+import PaymentCallback from "./pages/PaymentCallback";
+import OrderSuccess from "./pages/OrderSuccess"; // Ensure path is correct
 
 const App = () => {
   return (
@@ -42,8 +44,9 @@ const App = () => {
             <Route path="/jewelry" element={<JewelryPage />} />
             <Route path="/jewelry/:category" element={<JewelryPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/payment/callback" element={<PaymentCallback />} />
             <Route path="/order-status" element={<OrderStatusPage />} /> {/* <-- Added the combined order status route */}
-
+            <Route path="/order-success" element={<OrderSuccess />} />
             {/* Placeholders (Uncomment if needed) */}
             {/* <Route path="/gift-combo" element={<div className="text-center py-20">Gift Combo Page (Placeholder)</div>} />
             <Route path="/about" element={<div className="text-center py-20">About Us Page (Placeholder)</div>} />
