@@ -40,7 +40,15 @@ const PaymentCallback = () => {
           setIsVerifying(false);
           setHasVerified(true);
           console.error('Verification error:', error.response?.data || error.message);
-          const errorMessage = error.response?.data?.message || 'Something went wrong verifying the payment.';
+
+          let errorMessage = 'Something went wrong verifying the payment.';
+          if (!error.response) {
+            // Network error - server not reachable
+            errorMessage = 'Unable to connect to payment server. Please check your internet connection and try again.';
+          } else if (error.response?.data?.message) {
+            errorMessage = error.response.data.message;
+          }
+
           toast.error(`⚠️ ${errorMessage}`);
           setTimeout(() => {
             console.log(`Navigating to /order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(errorMessage)}`);

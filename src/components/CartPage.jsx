@@ -111,7 +111,15 @@ const CartPage = () => {
     } catch (error) {
       toast.dismiss(loadingToastId);
       console.error('Checkout Form Submission Error:', error);
-      const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+
+      let errorMessage = 'An error occurred. Please try again.';
+      if (!error.response) {
+        // Network error - server not reachable
+        errorMessage = 'Unable to connect to payment server. Please check your internet connection and try again.';
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+
       toast.error(errorMessage);
     }
   };
