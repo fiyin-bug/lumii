@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { allJewelryProducts } from '../data/products';
+import { allJewelryProducts } from '../data/Products';
 import { useCart } from '../context/CartContext';
 
 const JewelryPage = () => {
