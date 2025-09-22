@@ -12,10 +12,7 @@ export const useCart = () => {
 const getInitialCart = () => {
   const savedCart = localStorage.getItem('cartItems');
   const cart = savedCart ? JSON.parse(savedCart) : [];
-  return cart.map((item) => ({
-    ...item,
-    image: item.image && !item.image.startsWith('/images/') ? `/images/${item.image}` : item.image
-  }));
+  return cart;
 };
 
 export const CartProvider = ({ children }) => {
@@ -42,10 +39,7 @@ export const CartProvider = ({ children }) => {
         );
       } else {
         toast.success(`${productToAdd.name} added to cart!`);
-        const imagePath = productToAdd.image.startsWith('/images/')
-          ? productToAdd.image
-          : `/images/${productToAdd.image}`;
-        return [...prevItems, { ...productToAdd, image: imagePath, quantity: 1 }];
+        return [...prevItems, { ...productToAdd, quantity: 1 }];
       }
     });
   }, 300), []); // eslint-disable-line react-hooks/exhaustive-deps

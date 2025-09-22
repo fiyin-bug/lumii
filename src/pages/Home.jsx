@@ -2,7 +2,7 @@ import React from "react";
 import Hero from "../components/Hero";
 import FeaturedCollections from "../components/FeaturedCollections";
 import JewelryGuides from "../components/JewelryGuides";
-import Newsletter from "../components/Newsletter";
+import Newsletter from "../components/NewsLetter";
 
 const Home = () => {
   return (
