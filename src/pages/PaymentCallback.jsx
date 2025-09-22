@@ -1,54 +1,62 @@
-// src/pages/PaymentCallback.jsx
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import api from '../api'; // Use custom Axios instance
-import { useCart } from '../context/CartContext'; // Import useCart for clearing cart
+import axios from 'axios';
+import { useCart } from '../context/CartContext';
 
 const PaymentCallback = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const reference = searchParams.get('reference');
   const [isVerifying, setIsVerifying] = useState(true);
-  const { clearCart } = useCart(); // Get clearCart from CartContext
+  const [hasVerified, setHasVerified] = useState(false);
+  const { clearCart } = useCart();
 
   useEffect(() => {
-    if (reference) {
+    if (reference && !hasVerified) {
       const verifyPayment = async () => {
         try {
-          const response = await api.get(`/payment/verify?reference=${reference}`); // Use api instance
+          console.log(`Verifying payment for reference: ${reference}`);
+          const response = await axios.get(`http://localhost:5000/api/payment/verify?reference=${reference}`);
+          console.log('API response:', response.data);
           setIsVerifying(false);
+          setHasVerified(true);
 
           if (response.data.success) {
             toast.success('✅ Payment successful!');
-            clearCart(); // Clear cart on successful payment
+            clearCart();
             setTimeout(() => {
-              navigate('/order-success', { state: { reference } });
+              console.log(`Navigating to /order-status?status=success&reference=${reference}`);
+              navigate(`/order-status?status=success&reference=${reference}`);
             }, 2000);
           } else {
             toast.error(`❌ Payment failed: ${response.data.message}`);
             setTimeout(() => {
-              navigate('/cart');
+              console.log(`Navigating to /order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(response.data.message || 'payment_failed')}`);
+              navigate(`/order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(response.data.message || 'payment_failed')}`);
             }, 2000);
           }
         } catch (error) {
           setIsVerifying(false);
-          console.error('Verification error:', error);
+          setHasVerified(true);
+          console.error('Verification error:', error.response?.data || error.message);
           const errorMessage = error.response?.data?.message || 'Something went wrong verifying the payment.';
           toast.error(`⚠️ ${errorMessage}`);
           setTimeout(() => {
-            navigate('/cart');
+            console.log(`Navigating to /order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(errorMessage)}`);
+            navigate(`/order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(errorMessage)}`);
           }, 2000);
         }
       };
 
       verifyPayment();
-    } else {
+    } else if (!reference) {
       setIsVerifying(false);
       toast.error('No transaction reference provided.');
+      console.log('No reference provided, navigating to /cart');
       navigate('/cart');
     }
-  }, [reference, navigate, clearCart]);
+  }, [reference, navigate, clearCart, hasVerified]);
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>

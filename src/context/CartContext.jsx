@@ -1,5 +1,5 @@
 // src/context/CartContext.js
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { debounce } from 'lodash';
 
@@ -25,7 +25,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = debounce((productToAdd) => {
+  const addToCart = useCallback(debounce((productToAdd) => {
     if (!productToAdd.id || !productToAdd.name || !productToAdd.price || !productToAdd.image) {
       toast.error('Invalid product data.');
       return;
@@ -48,9 +48,9 @@ export const CartProvider = ({ children }) => {
         return [...prevItems, { ...productToAdd, image: imagePath, quantity: 1 }];
       }
     });
-  }, 300);
+  }, 300), []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const removeFromCart = debounce((productId) => {
+  const removeFromCart = useCallback(debounce((productId) => {
     setCartItems((prevItems) => {
       const itemToRemove = prevItems.find((item) => item.id === productId);
       if (itemToRemove) {
@@ -58,7 +58,7 @@ export const CartProvider = ({ children }) => {
       }
       return prevItems.filter((item) => item.id !== productId);
     });
-  }, 300);
+  }, 300), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateQuantity = (productId, amount) => {
     setCartItems((prevItems) =>

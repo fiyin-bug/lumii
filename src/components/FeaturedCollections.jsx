@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useCart } from '../context/CartContext';
 
 const FeaturedCollections = () => {
+  const { addToCart } = useCart();
   const collections = [
-    { id: 1, name: "Green Bracelet", price: "$299", image: "src/images/bracelet1.jpg" },
-    { id: 2, name: "Pink Bracelet", price: "$249", image: "src/images/bracelet2.jpg" },
-    { id: 3, name: "Solitaire Diamond Ring", price: "$179", image: "src/images/ring1.jpg" },
-    { id: 4, name: "Vintage Style Cluster Ring", price: "$219", image: "src/images/ring2.jpg" },
+    { id: 1, name: 'Green Bracelet', price: '₦159', image: '/images/bracelet1.jpg', category: 'Bracelets' },
+    { id: 2, name: 'Pink Bracelet', price: '₦289', image: '/images/bracelet2.jpg', category: 'Bracelets' },
+    { id: 22, name: 'Purple Ring', price: '₦249', image: '/images/ring9.jpg', category: 'Rings' },
+    { id: 23, name: 'Silver Ring', price: '₦299', image: '/images/ring10.jpg', category: 'Rings' },
   ];
 
   const [activeCategory, setActiveCategory] = useState(0);
@@ -15,11 +17,15 @@ const FeaturedCollections = () => {
   const nextSlide = () => setCurrentSlide((prev) => (prev === collections.length - 1 ? 0 : prev + 1));
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? collections.length - 1 : prev - 1));
 
-  // Adjust slide width based on screen size
   const getSlideWidth = () => {
-    if (window.innerWidth >= 1024) return 25; // 4 items visible (lg)
-    if (window.innerWidth >= 768) return 50;  // 2 items visible (md)
-    return 100; // 1 item visible (mobile)
+    if (window.innerWidth >= 1024) return 25;
+    if (window.innerWidth >= 768) return 50;
+    return 100;
+  };
+
+  const handleAddToCart = (e, item) => {
+    e.preventDefault();
+    addToCart(item);
   };
 
   return (
@@ -31,13 +37,13 @@ const FeaturedCollections = () => {
         </div>
         <div className="flex justify-center mb-8">
           <div className="inline-flex rounded-md shadow-sm">
-            {["Latest Pieces", "New Arrivals", "Bestsellers"].map((cat, index) => (
+            {['Latest Pieces', 'New Arrivals', 'Bestsellers'].map((cat, index) => (
               <button
                 key={index}
                 onClick={() => handleCategoryClick(index)}
                 className={`px-4 py-2 text-sm font-medium ${
-                  activeCategory === index ? "bg-[#f4b8da] text-white" : "bg-white text-gray-700"
-                } border border-[#f4b8da] ${index === 0 ? "rounded-l-lg" : index === 2 ? "rounded-r-lg" : "border-t border-b"} hover:bg-[#f4b8da] hover:text-white transition-colors duration-300`}
+                  activeCategory === index ? 'bg-[#f4b8da] text-white' : 'bg-white text-gray-700'
+                } border border-[#f4b8da] ${index === 0 ? 'rounded-l-lg' : index === 2 ? 'rounded-r-lg' : 'border-t border-b'} hover:bg-[#f4b8da] hover:text-white transition-colors duration-300`}
               >
                 {cat}
               </button>
@@ -51,7 +57,10 @@ const FeaturedCollections = () => {
               style={{ transform: `translateX(-${currentSlide * getSlideWidth()}%)` }}
             >
               {collections.map((item) => (
-                <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 min-w-full md:min-w-[50%] lg:min-w-[25%]">
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 min-w-full md:min-w-[50%] lg:min-w-[25%]"
+                >
                   <div className="h-64 overflow-hidden">
                     <img
                       src={item.image}
@@ -63,7 +72,10 @@ const FeaturedCollections = () => {
                     <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
                     <p className="text-[#f4b8da] font-bold mt-2">{item.price}</p>
                     <div className="mt-4 flex space-x-2">
-                      <button className="flex-1 bg-[#f4b8da] text-white py-2 rounded hover:bg-[#e9a0c7] transition-colors duration-300">
+                      <button
+                        onClick={(e) => handleAddToCart(e, item)}
+                        className="flex-1 bg-[#f4b8da] text-white py-2 rounded hover:bg-[#e9a0c7] transition-colors duration-300"
+                      >
                         Add to Cart
                       </button>
                       <button className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200 transition-colors duration-300">

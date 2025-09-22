@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const handleShopNowClick = () => {
+    navigate('/jewelry');
+  };
+
   return (
     <div
       className="relative pt-20 min-h-[600px] flex items-center"
@@ -19,7 +26,10 @@ const Hero = () => {
           <p className="text-white text-lg mb-8">
             Discover our exquisite collection of handcrafted jewelry designed to elevate your style.
           </p>
-          <button className="bg-white text-[#f4b8da] px-8 py-3 rounded-full font-medium hover:bg-[#f4b8da] hover:text-white transition-colors duration-300 shadow-md">
+          <button
+            className="bg-white text-[#f4b8da] px-8 py-3 rounded-full font-medium hover:bg-[#f4b8da] hover:text-white transition-colors duration-300 shadow-md"
+            onClick={handleShopNowClick}
+          >
             Shop Now
           </button>
         </div>

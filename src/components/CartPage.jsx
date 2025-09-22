@@ -1,6 +1,6 @@
 // src/pages/CartPage.jsx
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import api from '../api';
@@ -17,7 +17,6 @@ const CartPage = () => {
 
   const subtotal = getCartSubtotal();
   const cartCount = getCartCount();
-  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     firstName: '',
