@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import api from '../api';
 import { useCart } from '../context/CartContext';
 
 const PaymentCallback = () => {
@@ -17,7 +17,7 @@ const PaymentCallback = () => {
       const verifyPayment = async () => {
         try {
           console.log(`Verifying payment for reference: ${reference}`);
-          const response = await axios.get(`http://localhost:5000/api/payment/verify?reference=${reference}`);
+          const response = await api.get(`/payment/verify?reference=${reference}`);
           console.log('API response:', response.data);
           setIsVerifying(false);
           setHasVerified(true);
