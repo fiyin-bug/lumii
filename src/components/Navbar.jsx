@@ -31,13 +31,13 @@ const Navbar = () => {
       <div className="container mx-auto px-6 py-3 flex items-center justify-between">
         {/* Logo/Brand Name */}
         <div className="flex items-center">
-         <Link to="/" className="text-2xl font-serif font-bold text-[#f4b8da]" onClick={closeMobileMenu}>
-            LumisPrettyCollection
+         <Link to="/" className="text-xl md:text-2xl font-serif font-bold text-[#f4b8da]">
+            Lumiprettycollection
           </Link>
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-8 items-center">
+        <div className="hidden lg:flex space-x-6 xl:space-x-8 items-center">
           <NavLink to="/" className={({ isActive }) => isActive ? "text-[#f4b8da]" : "text-gray-700 hover:text-[#f4b8da]"} >
             Home
           </NavLink>
@@ -73,7 +73,7 @@ const Navbar = () => {
             )}
           </div>
            {/* --- Other Links --- */}
-          <NavLink to="/luxury hair" className={({ isActive }) => isActive ? "text-[#f4b8da]" : "text-gray-700 hover:text-[#f4b8da]"} >
+          <NavLink to="/luxury-hair" className={({ isActive }) => isActive ? "text-[#f4b8da]" : "text-gray-700 hover:text-[#f4b8da]"} >
            Luxury Hair
           </NavLink>
            <NavLink to="/about" className={({ isActive }) => isActive ? "text-[#f4b8da]" : "text-gray-700 hover:text-[#f4b8da]"}>
@@ -100,7 +100,7 @@ const Navbar = () => {
           </Link>
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-700 hover:text-[#f4b8da] transition-colors duration-300"
+            className="lg:hidden text-gray-700 hover:text-[#f4b8da] transition-colors duration-300"
             onClick={toggleMobileMenu}
           >
             <i className={`fas ${isMobileMenuOpen ? "fa-times" : "fa-bars"}`}></i>
@@ -110,7 +110,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-md px-6 py-4 absolute top-full left-0 right-0">
+        <div className="lg:hidden bg-white shadow-md px-6 py-4 absolute top-full left-0 right-0">
           <div className="flex flex-col space-y-4">
             <Link to="/" className="text-gray-700 hover:text-[#f4b8da]" onClick={closeMobileMenu}>
               Home
@@ -146,8 +146,8 @@ const Navbar = () => {
               )}
             </div>
             {/* Other Mobile Links */}
-            <Link to="/luxury hair" className="text-gray-700 hover:text-[#f4b8da]" onClick={closeMobileMenu}>
-              Gift Combo
+            <Link to="/luxury-hair" className="text-gray-700 hover:text-[#f4b8da]" onClick={closeMobileMenu}>
+              Luxury Hair
             </Link>
             <Link to="/about" className="text-gray-700 hover:text-[#f4b8da]" onClick={closeMobileMenu}>
               About Us

@@ -10,6 +10,8 @@ import Footer from './components/Footer';
 import { Toaster } from 'react-hot-toast';
 import PaymentCallback from './pages/PaymentCallback';
 import ContactUs from './pages/ContactUs';
+import AboutUs from './pages/AboutUs';
+import LuxuryHair from './pages/LuxuryHair';
 
 const App = () => {
   return (
@@ -44,6 +46,8 @@ const App = () => {
             <Route path="/order-status" element={<OrderStatusPage />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/luxury-hair" element={<LuxuryHair />} />
 
             {/* <Route path="*" element={<div className="text-center py-20">404 Not Found</div>} /> */}
           </Routes>
