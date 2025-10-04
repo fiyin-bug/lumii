@@ -45,7 +45,7 @@ const LuxuryHair = () => {
             We're crafting an exquisite collection of premium hair care products designed to complement your jewelry and enhance your beauty routine.
           </p>
           <p className="text-pink-500 text-base" style={{ fontFamily: 'Dakota, serif' }}>
-            Stay tuned for luxurious shampoos, conditioners, styling products, and hair accessories that match the elegance of Lumiprettycollection.
+            Stay tuned for luxurious shampoos, conditioners, styling products, and hair accessories that match the elegance of Lumi Pretty Collection.
           </p>
         </motion.div>
 

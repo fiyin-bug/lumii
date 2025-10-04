@@ -42,7 +42,7 @@ const AboutUs = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
-          About Lumiprettycollection
+          About Lumi Pretty Collection
         </motion.h1>
 
         <motion.p
@@ -57,7 +57,7 @@ const AboutUs = () => {
 
         <motion.div className="space-y-6 text-[#f4b8da] text-lg" style={{ fontFamily: 'Dakota, serif' }} variants={itemVariants}>
           <motion.p variants={itemVariants}>
-            At Lumiprettycollection, we believe that every piece of jewelry tells a story. Our passion for beauty and craftsmanship drives us to curate a collection that celebrates elegance, style, and individuality.
+            At Lumi Pretty Collection, we believe that every piece of jewelry tells a story. Our passion for beauty and craftsmanship drives us to curate a collection that celebrates elegance, style, and individuality.
           </motion.p>
 
           <motion.p variants={itemVariants}>
@@ -65,7 +65,7 @@ const AboutUs = () => {
           </motion.p>
 
           <motion.p variants={itemVariants}>
-            From delicate rings that sparkle with every movement to bold bracelets that make a statement, our collection offers something for every occasion and personal style. Whether you're looking for the perfect engagement ring, a meaningful gift, or simply a treat for yourself, Lumiprettycollection has you covered.
+            From delicate rings that sparkle with every movement to bold bracelets that make a statement, our collection offers something for every occasion and personal style. Whether you're looking for the perfect engagement ring, a meaningful gift, or simply a treat for yourself, Lumi Pretty Collection has you covered.
           </motion.p>
 
           <motion.p variants={itemVariants}>
@@ -73,12 +73,12 @@ const AboutUs = () => {
           </motion.p>
 
           <motion.p variants={itemVariants}>
-            Thank you for choosing Lumiprettycollection. We hope our jewelry brings joy and confidence to your life.
+            Thank you for choosing Lumi Pretty Collection. We hope our jewelry brings joy and confidence to your life.
           </motion.p>
         </motion.div>
 
         <motion.div className="mt-12 text-center" variants={itemVariants}>
-          <p className="text-[#f4b8da] text-lg" style={{ fontFamily: 'Dakota, serif' }}>Shine bright with Lumiprettycollection!</p>
+          <p className="text-[#f4b8da] text-lg" style={{ fontFamily: 'Dakota, serif' }}>Shine bright with Lumi Pretty Collection!</p>
         </motion.div>
       </motion.div>
     </div>
