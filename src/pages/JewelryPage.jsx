@@ -12,11 +12,11 @@ const JewelryPage = () => {
     const formattedCategory = category
       ? category.charAt(0).toUpperCase() + category.slice(1)
       : 'All';
-    const validCategories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces'];
+    const validCategories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces', 'Nose Cuffs'];
     setActiveFilter(validCategories.includes(formattedCategory) ? formattedCategory : 'All');
   }, [category]);
 
-  const categories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces'];
+  const categories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces', 'Nose Cuffs'];
   const filteredProducts =
     activeFilter === 'All'
       ? allJewelryProducts
@@ -41,16 +41,28 @@ const JewelryPage = () => {
               : `Discover our beautiful ${activeFilter.toLowerCase()}`}
           </p>
         </div>
-        <div className="flex justify-center flex-wrap mb-10 gap-2">
+        <div className="flex justify-center flex-wrap mb-10 gap-3">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
-              className={`px-5 py-2 text-sm font-medium rounded-full transition-colors duration-300 border border-[#f4b8da] ${
-                activeFilter === cat ? 'bg-[#f4b8da] text-white shadow-md' : 'bg-white text-gray-700 hover:bg-gray-100'
+              className={`group relative px-6 py-3 text-sm font-semibold rounded-full transition-all duration-300 border-2 overflow-hidden ${
+                activeFilter === cat
+                  ? 'bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white shadow-lg border-transparent'
+                  : 'bg-white text-gray-700 border-[var(--pinkish-brown)] hover:border-[var(--pinkish-brown-dark)] hover:shadow-md'
               }`}
             >
-              {cat}
+              <span className="relative z-10 flex items-center gap-2">
+                <span>{cat}</span>
+                {activeFilter === cat && (
+                  <svg className="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </span>
+              {activeFilter !== cat && (
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--desert-sand)]/10 to-[var(--pinkish-brown)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              )}
             </button>
           ))}
         </div>
@@ -63,7 +75,7 @@ const JewelryPage = () => {
               >
                 <div className="h-64 overflow-hidden relative">
                   <img
-                    src={product.image}
+                    src={product.images ? product.images[0] : product.image}
                     alt={product.name}
                     className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                   />
@@ -72,12 +84,19 @@ const JewelryPage = () => {
                   <h3 className="text-lg font-medium text-gray-800 mb-1 flex-grow min-h-[3rem]">
                     {product.name}
                   </h3>
-                  <p className="text-[#f4b8da] font-bold mt-1 mb-3 text-xl">{product.price}</p>
+                  <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{product.price}</p>
                   <button
                     onClick={(e) => handleAddToCart(e, product)}
-                    className="w-full bg-[#f4b8da] text-white py-2.5 rounded-md hover:bg-[#e9a0c7] transition-colors duration-300 font-medium mt-auto"
+                    className="group relative w-full bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-3 px-6 rounded-xl font-semibold hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 overflow-hidden mt-auto"
                   >
-                    Add to Cart
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      <span>Add to Cart</span>
+                      <svg className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] rounded-xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                   </button>
                 </div>
               </div>

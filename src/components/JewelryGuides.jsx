@@ -2,14 +2,13 @@ import React from "react";
 
 const JewelryGuides = () => {
   const guides = [
-    { id: 1, title: "How to Stack Rings", description: "Learn the art of ring stacking...", image: "https://public.readdy.ai/ai/img_res/8e74f808779a38b7a0b61f69eb74ef77.jpg" },
-    { id: 2, title: "Necklace Length Guide", description: "Find the perfect necklace length...", image: "https://public.readdy.ai/ai/img_res/5cf2343562b18fc08608f5dc95f3caf3.jpg" },
+    
     { id: 3, title: "Earring Styles Guide", description: "Discover which earring styles...", image: "https://public.readdy.ai/ai/img_res/28b7b1dd92dab67ac6af24c97a69790d.jpg" },
     { id: 4, title: "Bracelet Sizing Guide", description: "How to measure and find...", image: "https://public.readdy.ai/ai/img_res/01aa5eca90e0a87d5f616b0b5d0493f7.jpg" },
   ];
 
   return (
-    <div className="py-16 bg-white">
+    <div className="py-12 bg-white">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-serif font-bold text-gray-800 mb-2">Girl's Guide to Jewelry</h2>

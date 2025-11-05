@@ -1,3 +1,13 @@
 @import "tailwindcss";
 
 @import '@fortawesome/fontawesome-free/css/all.min.css';
+
+/* Custom Color Scheme - Desert Sand & Pinkish Brown */
+:root {
+  --desert-sand: #edc9af;
+  --pinkish-brown: #c27e79;
+  --desert-sand-light: #f5e6d8;
+  --pinkish-brown-light: #d4a59a;
+  --desert-sand-dark: #d4b495;
+  --pinkish-brown-dark: #a66a60;
+}

@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { allJewelryProducts } from '../data/Products';
 
 const FeaturedCollections = () => {
   const { addToCart } = useCart();
+
+  // Select a diverse mix of products from different categories
   const collections = [
-    { id: 1, name: 'Green Bracelet', price: '₦159', image: '/images/bracelet1.jpg', category: 'Bracelets' },
-    { id: 2, name: 'Pink Bracelet', price: '₦289', image: '/images/bracelet2.jpg', category: 'Bracelets' },
-    { id: 22, name: 'Purple Ring', price: '₦249', image: '/images/ring9.jpg', category: 'Rings' },
-    { id: 23, name: 'Silver Ring', price: '₦299', image: '/images/ring10.jpg', category: 'Rings' },
-  ];
+    // Necklaces - mix of different styles
+    allJewelryProducts.find(p => p.id === 1), // LPC 403.B
+    
+
+    // Nose Cuffs - new category
+    allJewelryProducts.find(p => p.id === 15), // LPC 501 A
+    allJewelryProducts.find(p => p.id === 24), // LPC 503 C
+
+    // Bracelets - new designs
+    allJewelryProducts.find(p => p.id === 27), // LPC 207 G
+    allJewelryProducts.find(p => p.id === 35), // LPC 325 GOLD
+
+    // Rings - mix
+    allJewelryProducts.find(p => p.id === 50), // Solitaire Diamond Ring
+    allJewelryProducts.find(p => p.id === 54), // Diamond Elegance Ring
+  ].filter(Boolean); // Remove any undefined items
 
   const [activeCategory, setActiveCategory] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -29,9 +43,9 @@ const FeaturedCollections = () => {
   };
 
   return (
-    <div className="py-16 bg-gradient-to-br from-pink-50 via-white to-rose-50 relative overflow-hidden">
+    <div className="py-16 bg-gradient-to-br from-[var(--desert-sand-light)] via-white to-[var(--pinkish-brown-light)] relative overflow-hidden">
       <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f4b8da' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='var(--pinkish-brown)' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         backgroundSize: '60px 60px'
       }}></div>
       <div className="container mx-auto px-6">
@@ -46,8 +60,8 @@ const FeaturedCollections = () => {
                 key={index}
                 onClick={() => handleCategoryClick(index)}
                 className={`px-4 py-2 text-sm font-medium ${
-                  activeCategory === index ? 'bg-[#f4b8da] text-white' : 'bg-white text-gray-700'
-                } border border-[#f4b8da] ${index === 0 ? 'rounded-l-lg' : index === 2 ? 'rounded-r-lg' : 'border-t border-b'} hover:bg-[#f4b8da] hover:text-white transition-colors duration-300`}
+                  activeCategory === index ? 'bg-[var(--pinkish-brown)] text-white' : 'bg-white text-gray-700'
+                } border border-[var(--pinkish-brown)] ${index === 0 ? 'rounded-l-lg' : index === 2 ? 'rounded-r-lg' : 'border-t border-b'} hover:bg-[var(--pinkish-brown)] hover:text-white transition-colors duration-300`}
               >
                 {cat}
               </button>
@@ -74,16 +88,23 @@ const FeaturedCollections = () => {
                   </div>
                   <div className="p-4">
                     <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
-                    <p className="text-[#f4b8da] font-bold mt-2">{item.price}</p>
+                    <p className="text-[var(--pinkish-brown)] font-bold mt-2">{item.price}</p>
                     <div className="mt-4 flex space-x-2">
                       <button
                         onClick={(e) => handleAddToCart(e, item)}
-                        className="flex-1 bg-[#f4b8da] text-white py-2 rounded hover:bg-[#e9a0c7] transition-colors duration-300"
+                        className="group relative flex-1 bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-2.5 px-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 overflow-hidden"
                       >
-                        Add to Cart
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          <span>Add to Cart</span>
+                          <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                          </svg>
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </button>
-                      <button className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200 transition-colors duration-300">
-                        <i className="fas fa-eye"></i>
+                      <button className="group relative bg-gradient-to-br from-[var(--desert-sand-light)] to-[var(--pinkish-brown-light)] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[var(--pinkish-brown)]/20">
+                        <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover:scale-110 transition-transform duration-300"></i>
+                        <div className="absolute inset-0 bg-gradient-to-br from-[var(--desert-sand)]/10 to-[var(--pinkish-brown)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                       </button>
                     </div>
                   </div>
@@ -93,13 +114,13 @@ const FeaturedCollections = () => {
           </div>
           <button
             onClick={prevSlide}
-            className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-[#f4b8da] hover:bg-[#f4b8da] hover:text-white transition-colors duration-300"
+            className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-colors duration-300"
           >
             <i className="fas fa-chevron-left"></i>
           </button>
           <button
             onClick={nextSlide}
-            className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-[#f4b8da] hover:bg-[#f4b8da] hover:text-white transition-colors duration-300"
+            className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-colors duration-300"
           >
             <i className="fas fa-chevron-right"></i>
           </button>

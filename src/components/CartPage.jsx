@@ -139,8 +139,11 @@ const CartPage = () => {
             <p className="text-gray-500 mb-6">Your cart is currently empty.</p>
             <Link
               to="/jewelry"
-              className="inline-block bg-[#f4b8da] text-white px-6 py-2.5 rounded-md hover:bg-[#e9a0c7] transition-colors duration-300 font-medium"
+              className="group inline-flex items-center gap-2 bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white px-8 py-3 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-semibold"
             >
+              <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
               Continue Shopping
             </Link>
           </div>
@@ -158,7 +161,7 @@ const CartPage = () => {
                       className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b pb-4 last:border-b-0"
                     >
                       <div className="flex items-center gap-4 flex-grow w-full sm:w-auto">
-                        <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                        <img src={item.images ? item.images[0] : item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
                         <div className="flex-grow">
                           <p className="font-medium text-gray-800">{item.name}</p>
                           <p className="text-sm text-gray-500">
@@ -167,20 +170,20 @@ const CartPage = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                        <div className="flex items-center border rounded">
+                        <div className="flex items-center border border-[var(--pinkish-brown)]/30 rounded-lg overflow-hidden">
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.id, -1)}
-                            className="px-2 py-1 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
+                            className="px-3 py-2 text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)]/10 disabled:opacity-50 transition-colors"
                             disabled={item.quantity <= 1}
                           >
                             <i className="fas fa-minus text-xs"></i>
                           </button>
-                          <span className="px-3 py-1 text-sm font-medium">{item.quantity}</span>
+                          <span className="px-4 py-2 text-sm font-semibold bg-[var(--desert-sand)]/5 border-x border-[var(--pinkish-brown)]/20">{item.quantity}</span>
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.id, 1)}
-                            className="px-2 py-1 text-gray-600 hover:bg-gray-100"
+                            className="px-3 py-2 text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)]/10 transition-colors"
                           >
                             <i className="fas fa-plus text-xs"></i>
                           </button>
@@ -188,9 +191,9 @@ const CartPage = () => {
                         <button
                           type="button"
                           onClick={() => removeFromCart(item.id)}
-                          className="text-red-500 hover:text-red-700 transition-colors"
+                          className="group p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-300"
                         >
-                          <i className="fas fa-trash-alt"></i>
+                          <i className="fas fa-trash-alt group-hover:scale-110 transition-transform duration-300"></i>
                         </button>
                       </div>
                     </div>
@@ -200,8 +203,9 @@ const CartPage = () => {
                   <button
                     type="button"
                     onClick={clearCart}
-                    className="text-sm text-gray-500 hover:text-red-600 underline"
+                    className="group inline-flex items-center gap-2 text-sm text-gray-500 hover:text-red-600 underline hover:no-underline transition-all duration-300"
                   >
+                    <i className="fas fa-trash-alt group-hover:scale-110 transition-transform duration-300"></i>
                     Clear Cart
                   </button>
                 </div>
@@ -221,7 +225,7 @@ const CartPage = () => {
                       value={formData.firstName}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.firstName ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -238,7 +242,7 @@ const CartPage = () => {
                       value={formData.lastName}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.lastName ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -255,7 +259,7 @@ const CartPage = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.email ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -272,7 +276,7 @@ const CartPage = () => {
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.phone ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -292,7 +296,7 @@ const CartPage = () => {
                       value={formData.street}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.street ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -309,7 +313,7 @@ const CartPage = () => {
                       value={formData.city}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.city ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -326,7 +330,7 @@ const CartPage = () => {
                       value={formData.state}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.state ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -343,7 +347,7 @@ const CartPage = () => {
                       value={formData.postalCode}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[#f4b8da] focus:border-[#f4b8da] ${
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
                         formErrors.postalCode ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -389,13 +393,24 @@ const CartPage = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-[#f4b8da] text-white py-3 rounded-md hover:bg-[#e9a0c7] transition-colors duration-300 font-semibold mt-6 text-center"
+                  className="group relative w-full bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-4 px-6 rounded-xl hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 overflow-hidden font-semibold mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   disabled={cartCount === 0}
                 >
-                  Place Order & Proceed to Payment
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <span>Place Order & Proceed to Payment</span>
+                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
-                <Link to="/jewelry" className="block text-center text-[#f4b8da] hover:underline mt-4 text-sm">
-                  Continue Shopping
+                <Link to="/jewelry" className="group block text-center text-[var(--pinkish-brown)] hover:text-[var(--pinkish-brown-dark)] hover:underline mt-4 text-sm transition-colors duration-300">
+                  <span className="flex items-center justify-center gap-1">
+                    <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Continue Shopping
+                  </span>
                 </Link>
               </div>
             </div>
