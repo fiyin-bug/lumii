@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { allJewelryProducts } from '../data/Products';
 import { useCart } from '../context/CartContext';
 
 const JewelryPage = () => {
   const { category } = useParams();
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const [activeFilter, setActiveFilter] = useState('All');
 
@@ -26,6 +27,10 @@ const JewelryPage = () => {
     e.preventDefault(); // Prevent event bubbling
     e.stopPropagation();
     addToCart(product);
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
   return (
@@ -73,12 +78,22 @@ const JewelryPage = () => {
                 key={product.id}
                 className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col group hover:shadow-xl transition-shadow duration-300"
               >
-                <div className="h-64 overflow-hidden relative">
+                <div className="h-64 overflow-hidden relative cursor-pointer" onClick={() => handleProductClick(product.id)}>
                   <img
                     src={product.images ? product.images[0] : product.image}
                     alt={product.name}
                     className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                   />
+                  {/* Eye button overlay */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleProductClick(product.id);
+                    }}
+                    className="absolute top-3 right-3 group/btn bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 border border-[var(--pinkish-brown)]/20"
+                  >
+                    <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover/btn:scale-110 transition-transform duration-300"></i>
+                  </button>
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <h3 className="text-lg font-medium text-gray-800 mb-1 flex-grow min-h-[3rem]">

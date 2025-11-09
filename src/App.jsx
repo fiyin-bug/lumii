@@ -4,6 +4,7 @@ import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import JewelryPage from './pages/JewelryPage';
+import ProductDetail from './pages/ProductDetail';
 import CartPage from './components/CartPage';
 import OrderStatusPage from './pages/OrderStatusPage';
 import Footer from './components/Footer';
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/jewelry" element={<JewelryPage />} />
             <Route path="/jewelry/:category" element={<JewelryPage />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/payment/callback" element={<PaymentCallback />} />
             <Route path="/order-status" element={<OrderStatusPage />} />

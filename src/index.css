@@ -11,3 +11,34 @@
   --desert-sand-dark: #d4b495;
   --pinkish-brown-dark: #a66a60;
 }
+
+/* Mobile Optimizations */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+}
+
+/* Better mobile text sizing */
+@media (max-width: 640px) {
+  .mobile-text-adjust {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+}
+
+/* Improved focus states for accessibility */
+.focus-ring:focus {
+  outline: 2px solid var(--pinkish-brown);
+  outline-offset: 2px;
+}

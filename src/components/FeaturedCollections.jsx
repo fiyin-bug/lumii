@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { allJewelryProducts } from '../data/Products';
 
 const FeaturedCollections = () => {
+  const navigate = useNavigate();
   const { addToCart } = useCart();
 
   // Select a diverse mix of products from different categories
   const collections = [
     // Necklaces - mix of different styles
     allJewelryProducts.find(p => p.id === 1), // LPC 403.B
-    
+
 
     // Nose Cuffs - new category
     allJewelryProducts.find(p => p.id === 15), // LPC 501 A
@@ -40,6 +42,10 @@ const FeaturedCollections = () => {
   const handleAddToCart = (e, item) => {
     e.preventDefault();
     addToCart(item);
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
   return (
@@ -79,7 +85,7 @@ const FeaturedCollections = () => {
                   key={item.id}
                   className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 min-w-full md:min-w-[50%] lg:min-w-[25%]"
                 >
-                  <div className="h-64 overflow-hidden">
+                  <div className="h-64 overflow-hidden cursor-pointer" onClick={() => handleProductClick(item.id)}>
                     <img
                       src={item.image}
                       alt={item.name}
@@ -102,7 +108,13 @@ const FeaturedCollections = () => {
                         </span>
                         <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </button>
-                      <button className="group relative bg-gradient-to-br from-[var(--desert-sand-light)] to-[var(--pinkish-brown-light)] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[var(--pinkish-brown)]/20">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleProductClick(item.id);
+                        }}
+                        className="group relative bg-gradient-to-br from-[var(--desert-sand-light)] to-[var(--pinkish-brown-light)] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[var(--pinkish-brown)]/20"
+                      >
                         <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover:scale-110 transition-transform duration-300"></i>
                         <div className="absolute inset-0 bg-gradient-to-br from-[var(--desert-sand)]/10 to-[var(--pinkish-brown)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                       </button>

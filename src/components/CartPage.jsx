@@ -1,11 +1,12 @@
 // src/pages/CartPage.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import api from '../api';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const {
     cartItems,
     removeFromCart,
@@ -112,16 +113,15 @@ const CartPage = () => {
       toast.dismiss(loadingToastId);
       console.error('Checkout Form Submission Error:', error);
 
-      let errorMessage = 'An error occurred. Please try again.';
-      if (!error.response) {
-        // Network error - server not reachable
-        errorMessage = 'Unable to connect to payment server. Please check your internet connection and try again.';
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      }
+      // Use custom error message from API interceptor if available
+      const errorMessage = error.customMessage || error.response?.data?.message || 'An error occurred during payment processing. Please try again.';
 
       toast.error(errorMessage);
     }
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
   console.log('Cart Items:', cartItems, 'Cart Count:', cartCount);
@@ -148,7 +148,7 @@ const CartPage = () => {
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleFormSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          <form onSubmit={handleFormSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-12">
             <div className="lg:col-span-2 space-y-8">
               <div className="bg-white rounded-lg shadow p-4 md:p-6">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-3">
@@ -161,7 +161,12 @@ const CartPage = () => {
                       className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b pb-4 last:border-b-0"
                     >
                       <div className="flex items-center gap-4 flex-grow w-full sm:w-auto">
-                        <img src={item.images ? item.images[0] : item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                        <img
+                          src={item.images ? item.images[0] : item.image}
+                          alt={item.name}
+                          className="w-16 h-16 object-cover rounded cursor-pointer hover:scale-105 transition-transform duration-300"
+                          onClick={() => handleProductClick(item.id)}
+                        />
                         <div className="flex-grow">
                           <p className="font-medium text-gray-800">{item.name}</p>
                           <p className="text-sm text-gray-500">

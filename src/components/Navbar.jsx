@@ -110,24 +110,28 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white shadow-md px-6 py-4 absolute top-full left-0 right-0">
-          <div className="flex flex-col space-y-4">
-            <Link to="/" className="text-gray-700 hover:text-[var(--pinkish-brown)]" onClick={closeMobileMenu}>
+        <div className="lg:hidden bg-white shadow-lg px-6 py-6 absolute top-full left-0 right-0 border-t border-gray-100">
+          <div className="flex flex-col space-y-6">
+            <Link
+              to="/"
+              className="text-gray-700 hover:text-[var(--pinkish-brown)] py-2 text-lg font-medium touch-manipulation"
+              onClick={closeMobileMenu}
+            >
               Home
             </Link>
             {/* Mobile Jewelry Dropdown */}
-            <div>
+            <div className="border-t border-gray-100 pt-4">
               <button
                 onClick={toggleDropdown}
-                className="text-gray-700 hover:text-[var(--pinkish-brown)] transition-colors duration-300 flex items-center w-full justify-between"
+                className="text-gray-700 hover:text-[var(--pinkish-brown)] transition-colors duration-300 flex items-center w-full justify-between py-2 text-lg font-medium touch-manipulation"
               >
-                Jewelleries <i className={`fas fa-chevron-${isDropdownOpen ? 'up' : 'down'} ml-1 text-xs transition-transform`}></i>
+                Jewelleries <i className={`fas fa-chevron-${isDropdownOpen ? 'up' : 'down'} ml-2 text-sm transition-transform`}></i>
               </button>
               {isDropdownOpen && (
-                <div className="mt-2 space-y-2 pl-4">
+                <div className="mt-3 space-y-3 pl-4 border-l-2 border-[var(--pinkish-brown)]/20">
                  <Link
                     to="/jewelry"
-                    className="block py-1 text-sm text-gray-700 hover:text-[var(--pinkish-brown)]"
+                    className="block py-2 text-base text-gray-700 hover:text-[var(--pinkish-brown)] touch-manipulation"
                     onClick={handleJewelryLinkClick}
                   >
                     All Jewelry
@@ -136,7 +140,7 @@ const Navbar = () => {
                     <Link
                       key={item}
                       to={`/jewelry/${item.toLowerCase()}`}
-                      className="block py-1 text-sm text-gray-700 hover:text-[var(--pinkish-brown)]"
+                      className="block py-2 text-base text-gray-700 hover:text-[var(--pinkish-brown)] touch-manipulation"
                       onClick={handleJewelryLinkClick}
                     >
                       {item}
@@ -146,15 +150,29 @@ const Navbar = () => {
               )}
             </div>
             {/* Other Mobile Links */}
-            <Link to="/luxury-hair" className="text-gray-700 hover:text-[var(--pinkish-brown)]" onClick={closeMobileMenu}>
-              Luxury Hair
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-[var(--pinkish-brown)]" onClick={closeMobileMenu}>
-              About Us
-            </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-[var(--pinkish-brown)]" onClick={closeMobileMenu}>
-              Contact Us
-            </Link>
+            <div className="border-t border-gray-100 pt-4 space-y-4">
+              <Link
+                to="/luxury-hair"
+                className="block text-gray-700 hover:text-[var(--pinkish-brown)] py-2 text-lg font-medium touch-manipulation"
+                onClick={closeMobileMenu}
+              >
+                Luxury Hair
+              </Link>
+              <Link
+                to="/about"
+                className="block text-gray-700 hover:text-[var(--pinkish-brown)] py-2 text-lg font-medium touch-manipulation"
+                onClick={closeMobileMenu}
+              >
+                About Us
+              </Link>
+              <Link
+                to="/contact"
+                className="block text-gray-700 hover:text-[var(--pinkish-brown)] py-2 text-lg font-medium touch-manipulation"
+                onClick={closeMobileMenu}
+              >
+                Contact Us
+              </Link>
+            </div>
           </div>
         </div>
       )}
