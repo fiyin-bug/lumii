@@ -34,9 +34,9 @@ const FeaturedCollections = () => {
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? collections.length - 1 : prev - 1));
 
   const getSlideWidth = () => {
-    if (window.innerWidth >= 1024) return 25;
-    if (window.innerWidth >= 768) return 50;
-    return 100;
+    if (window.innerWidth >= 1024) return 25; // 4 items on large screens
+    if (window.innerWidth >= 768) return 50;  // 2 items on tablets
+    return 50; // 2 items on mobile (changed from 100 to 50)
   };
 
   const handleAddToCart = (e, item) => {
@@ -77,7 +77,7 @@ const FeaturedCollections = () => {
         <div className="relative">
           <div className="overflow-hidden">
             <div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-[400%] md:w-[200%] lg:w-[100%] transition-transform duration-300"
+              className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 w-[200%] md:w-[200%] lg:w-[100%] transition-transform duration-300"
               style={{ transform: `translateX(-${currentSlide * getSlideWidth()}%)` }}
             >
               {collections.map((item) => (
@@ -89,20 +89,20 @@ const FeaturedCollections = () => {
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
+                      className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
                     />
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
-                    <p className="text-[var(--pinkish-brown)] font-bold mt-2">{item.price}</p>
-                    <div className="mt-4 flex space-x-2">
+                  <div className="p-4 flex flex-col flex-grow">
+                    <h3 className="text-lg font-medium text-gray-800 mb-1 flex-grow min-h-[3rem]">{item.name}</h3>
+                    <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{item.price}</p>
+                    <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:gap-2">
                       <button
                         onClick={(e) => handleAddToCart(e, item)}
-                        className="group relative flex-1 bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-2.5 px-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 overflow-hidden"
+                        className="group relative flex-1 bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-2.5 px-3 sm:px-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 overflow-hidden text-sm sm:text-base"
                       >
-                        <span className="relative z-10 flex items-center justify-center gap-2">
+                        <span className="relative z-10 flex items-center justify-center gap-1 sm:gap-2">
                           <span>Add to Cart</span>
-                          <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                           </svg>
                         </span>
@@ -113,9 +113,9 @@ const FeaturedCollections = () => {
                           e.stopPropagation();
                           handleProductClick(item.id);
                         }}
-                        className="group relative bg-gradient-to-br from-[var(--desert-sand-light)] to-[var(--pinkish-brown-light)] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[var(--pinkish-brown)]/20"
+                        className="group relative flex-shrink-0 bg-gradient-to-br from-[var(--desert-sand-light)] to-[var(--pinkish-brown-light)] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[var(--pinkish-brown)]/20 touch-manipulation"
                       >
-                        <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover:scale-110 transition-transform duration-300"></i>
+                        <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover:scale-110 transition-transform duration-300 text-sm sm:text-base"></i>
                         <div className="absolute inset-0 bg-gradient-to-br from-[var(--desert-sand)]/10 to-[var(--pinkish-brown)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                       </button>
                     </div>
@@ -126,15 +126,15 @@ const FeaturedCollections = () => {
           </div>
           <button
             onClick={prevSlide}
-            className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-colors duration-300"
+            className="absolute top-1/2 left-2 -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-all duration-300 touch-manipulation z-10"
           >
-            <i className="fas fa-chevron-left"></i>
+            <i className="fas fa-chevron-left text-lg"></i>
           </button>
           <button
             onClick={nextSlide}
-            className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-colors duration-300"
+            className="absolute top-1/2 right-2 -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-all duration-300 touch-manipulation z-10"
           >
-            <i className="fas fa-chevron-right"></i>
+            <i className="fas fa-chevron-right text-lg"></i>
           </button>
         </div>
       </div>
