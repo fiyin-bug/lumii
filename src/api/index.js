@@ -5,7 +5,7 @@ const productionUrl = import.meta.env.VITE_API_URL || 'https://backend-lumii.ver
 
 // Create axios instance with SSL error handling
 const api = axios.create({
-  baseURL: productionUrl, // Always use production URL for real API calls
+  baseURL: "https://backend-lumii-production.up.railway.app/api", // Railway backend
   timeout: 30000, // 30 second timeout
   headers: {
     'Content-Type': 'application/json',

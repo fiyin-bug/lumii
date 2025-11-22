@@ -13,11 +13,11 @@ const JewelryPage = () => {
     const formattedCategory = category
       ? category.charAt(0).toUpperCase() + category.slice(1)
       : 'All';
-    const validCategories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces', 'Nose Cuffs'];
+    const validCategories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces', 'Nose Cuffs', 'Anklets'];
     setActiveFilter(validCategories.includes(formattedCategory) ? formattedCategory : 'All');
   }, [category]);
 
-  const categories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces', 'Nose Cuffs'];
+  const categories = ['All', 'Bracelets', 'Rings', 'Earrings', 'Necklaces', 'Nose Cuffs', 'Anklets'];
   const filteredProducts =
     activeFilter === 'All'
       ? allJewelryProducts

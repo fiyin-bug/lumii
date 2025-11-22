@@ -31,7 +31,7 @@ export const allJewelryProducts = [
    { id: 25, name: "LPC 505 E", price: "₦1200", image: "/images/Nose Cuffs/LPC 505 E.jpg", category: "Nose Cuffs" },
    { id: 26, name: "LPC 501 J", price: "₦1200", image: "/images/Nose Cuffs/LPC501 J.jpg", category: "Nose Cuffs" },
 
-   // Bracelets (18)
+   // Bracelets (34)
    { id: 27, name: "LPC 207 G", price: "₦6,000", image: "/images/Bracelets/LPC 207 G.jpg", category: "Bracelets" },
    { id: 28, name: "LPC 302 B", price: "₦6,000", image: "/images/Bracelets/LPC 302 B.jpg", category: "Bracelets" },
    { id: 29, name: "LPC 303 C", price: "₦6,000", image: "/images/Bracelets/LPC 303 C.jpg", category: "Bracelets" },
@@ -50,20 +50,74 @@ export const allJewelryProducts = [
    { id: 42, name: "LPC 803", price: "₦3,500", image: "/images/Bracelets/LPC 803.jpg", category: "Bracelets" },
    { id: 43, name: "LPC 804", price: "₦4,500", image: "/images/Bracelets/LPC 804.jpg", category: "Bracelets" },
    
-  // Earrings (3)
-  { id: 45, name: "LPC 601", price: "₦4,000", image: "/images/EarRings/LPC 601.jpg", category: "Earrings" },
-  { id: 46, name: "LPC 602", price: "₦4,000", image: "/images/EarRings/LPC 602.jpg", category: "Earrings" },
-  { id: 47, name: "LPC 603", price: "₦4,000", image: "/images/EarRings/LPC 603.jpg", category: "Earrings" },
+   { id: 45, name: "LPC 116", price: "8,500", image: "/images/Bracelets/LPC 116.jpg", category: "Bracelets" },
+   { id: 46, name: "LPC 117", price: "8,000", image: "/images/Bracelets/LPC 117.jpg", category: "Bracelets" },
+   { id: 47, name: "LPC 118", price: "8,000", image: "/images/Bracelets/LPC 118.jpg", category: "Bracelets" },
+   
+   { id: 49, name: "LPC 119", price: "8,000", image: "/images/Bracelets/LPC 119.jpg", category: "Bracelets" },
+   { id: 50, name: "LPC 120 S", price: "8,000", image: "/images/Bracelets/LPC 120 S.jpg", category: "Bracelets" },
+   { id: 51, name: "LPC 121 PINK", price: "8,500", image: "/images/Bracelets/LPC 121 PINK.jpg", category: "Bracelets" },
+   { id: 52, name: "LPC 121 SILVER", price: "8,500", image: "/images/Bracelets/LPC 121 S.jpg", category: "Bracelets" },
+   { id: 53, name: "LPC 122", price: "8,500", images: ["/images/Bracelets/LPC 122.jpg", "/images/Bracelets/LPC 122.1.jpg", "/images/Bracelets/LPC 122.2.jpg"], category: "Bracelets" },
+   { id: 54, name: "LPC 124", price: "10,000", image: "/images/Bracelets/LPC 124.jpg", category: "Bracelets" },
+   { id: 55, name: "LPC 125", price: "10,000", image: "/images/Bracelets/LPC 125.jpg", category: "Bracelets" },
+   { id: 56, name: "LPC 126", price: "8,500", image: "/images/Bracelets/LPC 126.jpg", category: "Bracelets" },
+   { id: 57, name: "LPC 127(love)", price: "8,500", image: "/images/Bracelets/LPC 127(love).jpg", category: "Bracelets" },
+   { id: 58, name: "LPC 128", price: "8,500", image: "/images/Bracelets/LPC 128.jpg", category: "Bracelets" },
+   { id: 59, name: "LPC 311", price: "11,000", image: "/images/Bracelets/LPC 311.jpg", category: "Bracelets" },
+   { id: 60, name: "LPC 312", price: "11,000", image: "/images/Bracelets/LPC 312.jpg", category: "Bracelets" },
 
-   // Rings (9)
-   { id: 50, name: "Solitaire Diamond Ring", price: "₦999", image: "/images/ring1.jpg", category: "Rings" },
-   { id: 51, name: "Emerald Cut Halo Ring", price: "₦1250", image: "/images/ring2.jpg", category: "Rings" },
-   { id: 52, name: "Simple Gold Band", price: "₦199", image: "/images/ring3.jpg", category: "Rings" },
-   { id: 53, name: "Vintage Style Cluster Ring", price: "₦450", image: "/images/ring4.jpg", category: "Rings" },
-   { id: 54, name: "Diamond Elegance Ring", price: "₦299", image: "/images/ring6.jpg", category: "Rings" },
-   { id: 55, name: "Green Ring", price: "₦349", image: "/images/ring7.jpg", category: "Rings" },
-   { id: 56, name: "Red Ring", price: "₦399", image: "/images/ring8.jpg", category: "Rings" },
-   { id: 57, name: "Purple Ring", price: "₦249", image: "/images/ring9.jpg", category: "Rings" },
-   { id: 58, name: "Silver Ring", price: "₦299", image: "/images/ring10.jpg", category: "Rings" },
+  // Earrings (3)
+  { id: 61, name: "LPC 601", price: "₦4,000", image: "/images/EarRings/LPC 601.jpg", category: "Earrings" },
+  { id: 62, name: "LPC 602", price: "₦4,000", image: "/images/EarRings/LPC 602.jpg", category: "Earrings" },
+  { id: 63, name: "LPC 603", price: "₦4,000", image: "/images/EarRings/LPC 603.jpg", category: "Earrings" },
+
+   // Rings (32)
+   { id: 64, name: "LPC 102 A", price: "", image: "/images/Rings/LPC 102 A.jpg", category: "Rings" },
+   { id: 65, name: "LPC 102 B", price: "7,000", image: "/images/Rings/LPC 102 B.jpg", category: "Rings" },
+   { id: 66, name: "LPC 110", price: "5000", image: "/images/Rings/LPC 110.jpg", category: "Rings" },
+   { id: 67, name: "LPC 111", price: "5000", image: "/images/Rings/LPC 111.jpg", category: "Rings" },
+   { id: 68, name: "LPC 112", price: "5000", image: "/images/Rings/LPC 112.jpg", category: "Rings" },
+   { id: 69, name: "LPC 113", price: "5000", image: "/images/Rings/LPC 113.jpg", category: "Rings" },
+   { id: 70, name: "LPC 114", price: "5000", image: "/images/Rings/LPC 114.jpg", category: "Rings" },
+   { id: 71, name: "LPC 115", price: "5000", image: "/images/Rings/LPC 115.jpg", category: "Rings" },
+   { id: 72, name: "LPC 133", price: "5000", image: "/images/Rings/LPC 133.jpg", category: "Rings" },
+   { id: 73, name: "LPC 201 C", price: "8,500", image: "/images/Rings/LPC 201 C.jpg", category: "Rings" },
+   { id: 73, name: "LPC 201 D", price: "7,000", image: "/images/Rings/LPC 201 D.jpg", category: "Rings" },
+   { id: 74, name: "LPC 201 E", price: "8000", image: "/images/Rings/LPC 201 E.jpg", category: "Rings" },
+   { id: 75, name: "LPC 201 F", price: "8,000", image: "/images/Rings/LPC 201 F.jpg", category: "Rings" },
+   { id: 76, name: "LPC 201 G", price: "", image: "/images/Rings/LPC 201 G.jpg", category: "Rings" },
+   { id: 77, name: "LPC 201 H", price: "8,000", image: "/images/Rings/LPC 201 H.jpg", category: "Rings" },
+   { id: 78, name: "LPC 201 I", price: "7,500", image: "/images/Rings/LPC 201 I.jpg", category: "Rings" },
+   { id: 79, name: "LPC 201 J", price: "8,000", image: "/images/Rings/LPC 201 J.jpg", category: "Rings" },
+   { id: 80, name: "LPC 201", price: "8000", image: "/images/Rings/LPC 201.jpg", category: "Rings" },
+   { id: 81, name: "LPC 311 ", price: "11,000", image: "/images/Rings/LPC 312 A.jpg", category: "Rings" },
+   
+   { id: 81, name: "LPC 312 E", price: "11,000", image: "/images/Rings/LPC 312 E.jpg", category: "Rings" },
+   
+   { id: 82, name: "LPC 313 A", price: "5000", image: "/images/Rings/LPC 313 A.jpg", category: "Rings" },
+   { id: 83, name: "LPC 313 B", price: "5000", image: "/images/Rings/LPC 313 B.jpg", category: "Rings" },
+   { id: 84, name: "LPC 313 C", price: "5000", image: "/images/Rings/LPC 313 C.jpg", category: "Rings" },
+   { id: 85, name: "LPC 313 D", price: "5000", image: "/images/Rings/LPC 313 D.jpg", category: "Rings" },
+   { id: 86, name: "LPC 313 F", price: "5000", image: "/images/Rings/LPC 313 F.jpg", category: "Rings" },
+   { id: 87, name: "LPC 313 G", price: "5000", image: "/images/Rings/LPC 313 G.jpg", category: "Rings" },
+   { id: 88, name: "LPC 313", price: "5000", image: "/images/Rings/LPC 313.jpg", category: "Rings" },
+   { id: 89, name: "LPC 314", price: "7000", image: "/images/Rings/LPC 314.jpg", category: "Rings" },
+   { id: 90, name: "LPC 315", price: "5000", image: "/images/Rings/LPC 315.jpg", category: "Rings" },
+   { id: 91, name: "LPC 317", price: "5000", image: "/images/Rings/LPC 317.jpg", category: "Rings" },
+   { id: 92, name: "LPC 319", price: "5000", image: "/images/Rings/LPC 319jpg", category: "Rings" },
+   { id: 93, name: "LPC 320", price: "5,000", image: "/images/Rings/LPC 320.jpg", category: "Rings" },
+   { id: 94, name: "LPC 321", price: "5000", image: "/images/Rings/LPC 321.jpg", category: "Rings" },
+   { id: 95, name: "LPC 322 GOLD ", price: "", image: "/images/Rings/LPC 322 GOLD .jpg", category: "Rings" },
+   { id: 96, name: "LPC 323", price: "5,000", image: "/images/Rings/LPC 323.jpg", category: "Rings" },
+
+   // Anklets (7)
+   { id: 97, name: "LPC 801", price: "7000", image: "/images/Anklets/LPC 801.JPG", category: "Anklets" },
+   { id: 98, name: "LPC 802", price: "7000", image: "/images/Anklets/LPC 802.jpg", category: "Anklets" },
+   { id: 99, name: "LPC 803", price: "3500", image: "/images/Anklets/LPC 803.jpg", category: "Anklets" },
+   { id: 100, name: "LPC 804", price: "4500", image: "/images/Anklets/LPC 804.jpg", category: "Anklets" },
+   { id: 101, name: "LPC 804jpg", price: "", image: "/images/Anklets/LPC 804jpg", category: "Anklets" },
+   { id: 102, name: "LPC 805", price: "3500", image: "/images/Anklets/LPC 805.jpg", category: "Anklets" },
+   { id: 103, name: "LPC 809", price: "4500", image: "/images/Anklets/LPC 809.jpg", category: "Anklets" },
 
 ];
