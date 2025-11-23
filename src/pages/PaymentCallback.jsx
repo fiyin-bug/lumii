@@ -24,10 +24,9 @@ const PaymentCallback = () => {
 
           if (response.data.success) {
             toast.success('✅ Payment successful!');
-            clearCart();
             setTimeout(() => {
-              console.log(`Navigating to /order-status?status=success&reference=${reference}`);
-              navigate(`/order-status?status=success&reference=${reference}`);
+              console.log(`Navigating to /payment/success?reference=${reference}`);
+              navigate(`/payment/success?reference=${reference}`);
             }, 2000);
           } else {
             toast.error(`❌ Payment failed: ${response.data.message}`);
@@ -67,13 +66,49 @@ const PaymentCallback = () => {
   }, [reference, navigate, clearCart, hasVerified]);
 
   return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
-      <h2>{isVerifying ? 'Verifying your payment...' : 'Payment Verification'}</h2>
-      <p>
-        {isVerifying
-          ? 'Please wait while we confirm your transaction.'
-          : 'Verification complete. Redirecting...'}
-      </p>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+        <div className="text-center">
+          <div className="mb-6">
+            {isVerifying ? (
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--pinkish-brown)] mx-auto"></div>
+            ) : (
+              <div className="text-4xl mb-4">
+                {hasVerified ? '✅' : '❌'}
+              </div>
+            )}
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            {isVerifying ? 'Verifying Payment' : 'Verification Complete'}
+          </h2>
+          <p className="text-gray-600 mb-6">
+            {isVerifying
+              ? 'Please wait while we confirm your transaction...'
+              : 'Redirecting you to the order status page...'}
+          </p>
+          {reference && (
+            <div className="mb-4">
+              <p className="text-sm text-gray-500 mb-2">
+                Reference: <code className="bg-gray-100 px-2 py-1 rounded">{reference}</code>
+              </p>
+              <p className="text-xs text-gray-400">
+                If redirect doesn't work, copy this URL and paste in browser:
+              </p>
+              <p className="text-xs text-blue-600 break-all">
+                http://localhost:5174/payment/callback?reference={reference}
+              </p>
+            </div>
+          )}
+          {!reference && (
+            <div className="text-red-600">
+              <p>No transaction reference found in URL.</p>
+              <p className="text-sm mt-2">
+                Make sure Paystack redirects to: <code>http://localhost:5174/payment/callback?reference=YOUR_REFERENCE</code>
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

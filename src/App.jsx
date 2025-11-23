@@ -10,6 +10,7 @@ import OrderStatusPage from './pages/OrderStatusPage';
 import Footer from './components/Footer';
 import { Toaster } from 'react-hot-toast';
 import PaymentCallback from './pages/PaymentCallback';
+import PaymentSuccess from './pages/PaymentSuccess';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import LuxuryHair from './pages/LuxuryHair';
@@ -45,6 +46,8 @@ const App = () => {
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/payment/callback" element={<PaymentCallback />} />
+            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/test-success" element={<PaymentSuccess />} />
             <Route path="/order-status" element={<OrderStatusPage />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/contact" element={<ContactUs />} />
