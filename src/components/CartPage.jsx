@@ -91,12 +91,21 @@ const CartPage = () => {
       lastName: formData.lastName,
       phone: formData.phone,
       shippingAddress,
-      items: cartItems.map((item) => ({
-        id: item.id,
-        quantity: item.quantity,
-        price: parseFloat(item.price.replace(/[^0-9.-]+/g, '')), // Parse price for backend
-      })),
+      items: cartItems.map((item) => {
+        const parsedPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, ''));
+        if (isNaN(parsedPrice) || parsedPrice <= 0) {
+          throw new Error(`Invalid price for item ${item.name}: ${item.price}`);
+        }
+        return {
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: Math.round(parsedPrice), // Send as integer
+        };
+      }),
     };
+
+    console.log('Order Data being sent:', orderData);
 
     const loadingToastId = toast.loading('Processing your order...');
 

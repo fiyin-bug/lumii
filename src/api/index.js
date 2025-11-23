@@ -1,68 +1,61 @@
 // src/api/index.js
 import axios from 'axios';
 
-const productionUrl = import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app/api';
+// ------------------------
+// Backend URLs
+// ------------------------
+const isDev = import.meta.env.DEV;
 
-// Create axios instance with SSL error handling
+const localUrl = 'http://localhost:5000/api'; // Local dev backend (HTTP)
+const productionUrl =
+  import.meta.env.VITE_API_URL || 'https://backend-lumii-production.up.railway.app/api';
+
+// ------------------------
+// Axios instance
+// ------------------------
 const api = axios.create({
-  baseURL: "https://backend-lumii-production.up.railway.app/api", // Railway backend
-  timeout: 30000, // 30 second timeout
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  // Note: In production, SSL should be properly configured
-  // This is for development/testing only
-  httpsAgent: undefined, // Let axios handle SSL normally
+  baseURL: isDev ? '/api' : productionUrl, // Use Vite proxy in dev
+  timeout: 30000, // 30s timeout
+  headers: { 'Content-Type': 'application/json' },
 });
 
-// Use real API in both development and production
-// Remove mock API to test real backend connection
-console.log('🔗 Using real API connection:', productionUrl);
+console.log('🔗 Using API Base URL:', api.defaults.baseURL);
 
-// Add request interceptor for debugging
+// ------------------------
+// Request interceptor
+// ------------------------
 api.interceptors.request.use(
   (config) => {
-    console.log('API Request:', config.method?.toUpperCase(), config.url);
+    console.log('➡️ API Request:', config.method?.toUpperCase(), config.url);
     return config;
   },
   (error) => {
-    console.error('API Request Error:', error);
+    console.error('❌ API Request Error:', error);
     return Promise.reject(error);
   }
 );
 
-// Add response interceptor for better error handling
+// ------------------------
+// Response interceptor
+// ------------------------
 api.interceptors.response.use(
   (response) => {
-    console.log('API Response:', response.status, response.config.url);
+    console.log('✅ API Response:', response.status, response.config.url);
     return response;
   },
   (error) => {
-    console.error('API Response Error:', error);
+    console.error('❌ API Response Error:', error);
 
-    // Enhanced error handling for different scenarios
+    // Network error (no response)
     if (!error.response) {
-      // Network error - server not reachable
-      if (error.code === 'ECONNABORTED') {
-        error.customMessage = 'Request timed out. Please check your internet connection and try again.';
-      } else if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
-        error.customMessage = 'Unable to connect to payment server. The server may be down or there may be a network issue.';
-      } else if (error.message.includes('SSL') || error.message.includes('TLS') || error.message.includes('certificate')) {
-        error.customMessage = 'SSL certificate error. The payment server has security certificate issues. Please contact support.';
-      } else {
-        error.customMessage = 'Network error. Please check your internet connection and try again.';
-      }
-    } else if (error.response) {
-      // Server responded with error status
+      error.customMessage =
+        'Network error. Check your internet connection or if the backend is running.';
+    } else {
       const status = error.response.status;
-      if (status === 500) {
-        error.customMessage = 'Server error. Please try again later or contact support.';
-      } else if (status === 404) {
-        error.customMessage = 'Payment service not found. Please contact support.';
-      } else if (status === 403) {
-        error.customMessage = 'Access denied. Please check your credentials.';
-      } else if (status >= 400 && status < 500) {
-        error.customMessage = error.response.data?.message || 'Request error. Please check your information and try again.';
+
+      if (status >= 400 && status < 500) {
+        error.customMessage =
+          error.response.data?.message || 'Client error. Check your request.';
       } else {
         error.customMessage = 'Server error. Please try again later.';
       }
@@ -73,3 +66,4 @@ api.interceptors.response.use(
 );
 
 export default api;
+
