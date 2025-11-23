@@ -11,8 +11,18 @@ const PaymentSuccess = () => {
   useEffect(() => {
     console.log('🎉 PaymentSuccess page loaded with reference:', reference);
     console.log('📍 Current URL:', window.location.href);
+    console.log('🛒 Clearing cart...');
+
     // Clear the cart when payment is successful
     clearCart();
+
+    // Add a timeout to check if page is still visible
+    const checkVisibility = setTimeout(() => {
+      console.log('⏰ 5 seconds passed - PaymentSuccess page should still be visible');
+      console.log('📍 Current URL after 5s:', window.location.href);
+    }, 5000);
+
+    return () => clearTimeout(checkVisibility);
   }, [clearCart, reference]);
 
   return (

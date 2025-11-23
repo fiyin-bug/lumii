@@ -70,11 +70,11 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCartItems([]);
     localStorage.removeItem('cartItems');
     toast.success('Cart cleared!');
-  };
+  }, []);
 
   const getCartCount = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
