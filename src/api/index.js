@@ -14,10 +14,37 @@ const productionUrl =
 // Axios instance
 // ------------------------
 const api = axios.create({
-  baseURL: isDev ? '/api' : productionUrl, // Use Vite proxy in dev
+  baseURL: productionUrl, // Use production API in both dev and prod
   timeout: 30000, // 30s timeout
   headers: { 'Content-Type': 'application/json' },
 });
+
+// ------------------------
+// Mock for dev
+// ------------------------
+if (isDev) {
+  api.interceptors.request.use((config) => {
+    if (config.url === '/payment/initialize' && config.method === 'post') {
+      // Mock response for payment initialize
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            data: {
+              success: true,
+              authorizationUrl: 'https://example.com/pay', // Mock payment URL
+              message: 'Payment initialized successfully (mocked)',
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config,
+          });
+        }, 1000); // Delay to simulate network
+      });
+    }
+    return config;
+  });
+}
 
 console.log('🔗 Using API Base URL:', api.defaults.baseURL);
 
@@ -66,4 +93,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
