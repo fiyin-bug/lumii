@@ -26,7 +26,7 @@ if (isDev) {
   api.interceptors.request.use((config) => {
     if (config.url === '/payment/initialize' && config.method === 'post') {
       // Mock response for payment initialize
-      return new Promise((resolve) => {
+      config.adapter = () => new Promise((resolve) => {
         setTimeout(() => {
           resolve({
             data: {
