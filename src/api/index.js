@@ -8,7 +8,7 @@ const isDev = import.meta.env.DEV;
 
 const localUrl = 'http://localhost:5000/api'; // Local dev backend (HTTP)
 const productionUrl =
-  import.meta.env.VITE_API_URL || 'https://backend-lumii-production.up.railway.app/api';
+  import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app';
 
 // ------------------------
 // Axios instance
