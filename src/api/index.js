@@ -20,30 +20,10 @@ const api = axios.create({
 });
 
 // ------------------------
-// Mock for dev
+// Development logging
 // ------------------------
 if (isDev) {
-  api.interceptors.request.use((config) => {
-    if (config.url === '/payment/initialize' && config.method === 'post') {
-      // Mock response for payment initialize
-      config.adapter = () => new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            data: {
-              success: true,
-              authorizationUrl: 'https://example.com/pay', // Mock payment URL
-              message: 'Payment initialized successfully (mocked)',
-            },
-            status: 200,
-            statusText: 'OK',
-            headers: {},
-            config,
-          });
-        }, 1000); // Delay to simulate network
-      });
-    }
-    return config;
-  });
+  console.log('🚀 Running in development mode - API calls will go to:', productionUrl);
 }
 
 console.log('🔗 Using API Base URL:', api.defaults.baseURL);
