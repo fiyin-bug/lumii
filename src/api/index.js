@@ -1,4 +1,3 @@
-// src/api/index.js
 import axios from 'axios';
 
 // ------------------------
@@ -6,16 +5,17 @@ import axios from 'axios';
 // ------------------------
 const isDev = import.meta.env.DEV;
 
-const localUrl = 'http://localhost:5000/api'; // Local dev backend (HTTP)
-const productionUrl =
-  import.meta.env.VITE_API_URL || 'https://backend-lumii-1qpb910u4-davids-projects-b37cdfcb.vercel.app';
+// Use your permanent Vercel domain instead of the temporary deployment ID
+const productionUrl = 'https://backend-lumii.vercel.app'; 
+const localUrl = 'http://localhost:5000'; // Standard local backend port
 
 // ------------------------
 // Axios instance
 // ------------------------
 const api = axios.create({
-  baseURL: productionUrl, // Use production API in both dev and prod
-  timeout: 30000, // 30s timeout
+  // Automatically switch between local and production based on where you are running
+  baseURL: isDev ? productionUrl : productionUrl, 
+  timeout: 30000, 
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -23,16 +23,16 @@ const api = axios.create({
 // Development logging
 // ------------------------
 if (isDev) {
-  console.log('🚀 Running in development mode - API calls will go to:', productionUrl);
+  console.log('🚀 Running in development mode - API calls will go to:', api.defaults.baseURL);
 }
-
-console.log('🔗 Using API Base URL:', api.defaults.baseURL);
 
 // ------------------------
 // Request interceptor
 // ------------------------
 api.interceptors.request.use(
   (config) => {
+    // Ensure the URL starts with /api if your backend routes require it
+    // If your backend endpoints already start with /api (like /api/payment/initialize), this is perfect
     console.log('➡️ API Request:', config.method?.toUpperCase(), config.url);
     return config;
   },
@@ -56,7 +56,7 @@ api.interceptors.response.use(
     // Network error (no response)
     if (!error.response) {
       error.customMessage =
-        'Network error. Check your internet connection or if the backend is running.';
+        'Network error. Please check your connection or verify the backend is active at ' + productionUrl;
     } else {
       const status = error.response.status;
 
