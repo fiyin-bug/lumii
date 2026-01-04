@@ -77,33 +77,31 @@ const CartPage = () => {
       return;
     }
 
-    // 1. Force values to strings/numbers to prevent 'undefined' crashes
-    const payload = {
-      email: String(formData.email).trim(),
-      amount: Number(subtotal) * 100, // Paystack expects Kobo/Kobo equivalent
-      metadata: {
-        cartItems: JSON.stringify(cartItems) // Convert objects to strings for safety
-      }
+    // 1. Structure data simply (Paystack expects amount in Kobo)
+    const orderData = {
+      email: formData.email.trim(),
+      amount: Math.round(subtotal * 100),
     };
 
-    console.log('Payload being sent:', payload);
+    console.log('Order Data being sent:', orderData);
 
     const loadingToastId = toast.loading('Processing your order...');
 
     try {
-      // 2. Explicitly use the full URL to bypass any Axios config issues
-      const response = await axios.post(
-        'https://backend-lumii.vercel.app/api/payment/initialize',
-        payload,
-        {
-          headers: { 'Content-Type': 'application/json' }
+      // 2. Use a direct Axios call with minimal headers to avoid Preflight failure
+      const response = await axios({
+        method: 'post',
+        url: 'https://backend-lumii.vercel.app/api/payment/initialize',
+        data: orderData,
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
 
       toast.dismiss(loadingToastId);
 
-      if (response.data.data?.authorization_url) {
-        window.location.href = response.data.data.authorization_url;
+      if (response.data?.authorization_url) {
+        window.location.href = response.data.authorization_url;
       } else {
         toast.error(response.data?.message || 'Could not initiate payment.');
       }
