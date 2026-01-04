@@ -77,31 +77,37 @@ const CartPage = () => {
       return;
     }
 
-    // 1. Structure data simply (Paystack expects amount in Kobo)
-    const orderData = {
+    // 1. Ensure data is valid before sending
+    const amount = parseFloat(subtotal);
+    if (isNaN(amount) || !formData.email) {
+      console.error("Invalid form data");
+      return;
+    }
+
+    const payload = {
       email: formData.email.trim(),
-      amount: Math.round(subtotal * 100),
+      amount: Math.round(amount * 100), // Convert to kobo/cents
     };
 
-    console.log('Order Data being sent:', orderData);
+    console.log('Payload being sent:', payload);
 
     const loadingToastId = toast.loading('Processing your order...');
 
     try {
-      // 2. Use a direct Axios call with minimal headers to avoid Preflight failure
-      const response = await axios({
-        method: 'post',
-        url: 'https://backend-lumii.vercel.app/api/payment/initialize',
-        data: orderData,
-        headers: {
-          'Content-Type': 'application/json'
+      // 2. Use a direct URL to rule out Axios config issues
+      const response = await axios.post(
+        'https://backend-lumii.vercel.app/api/payment/initialize',
+        payload,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 10000 // 10 seconds
         }
-      });
+      );
 
       toast.dismiss(loadingToastId);
 
-      if (response.data?.authorization_url) {
-        window.location.href = response.data.authorization_url;
+      if (response.data?.data?.authorization_url) {
+        window.location.href = response.data.data.authorization_url;
       } else {
         toast.error(response.data?.message || 'Could not initiate payment.');
       }
