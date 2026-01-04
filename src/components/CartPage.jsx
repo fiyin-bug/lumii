@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
-import api from '../api';
+import axios from 'axios';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -77,44 +77,33 @@ const CartPage = () => {
       return;
     }
 
-    const shippingAddress = {
-      street: formData.street,
-      city: formData.city,
-      state: formData.state,
-      postalCode: formData.postalCode,
-      country: formData.country,
+    // 1. Force values to strings/numbers to prevent 'undefined' crashes
+    const payload = {
+      email: String(formData.email).trim(),
+      amount: Number(subtotal) * 100, // Paystack expects Kobo/Kobo equivalent
+      metadata: {
+        cartItems: JSON.stringify(cartItems) // Convert objects to strings for safety
+      }
     };
 
-    const orderData = {
-      email: formData.email,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phone: formData.phone,
-      shippingAddress,
-      items: cartItems.map((item) => {
-        const parsedPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, ''));
-        if (isNaN(parsedPrice) || parsedPrice <= 0) {
-          throw new Error(`Invalid price for item ${item.name}: ${item.price}`);
-        }
-        return {
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: Math.round(parsedPrice), // Send as integer
-        };
-      }),
-    };
-
-    console.log('Order Data being sent:', orderData);
+    console.log('Payload being sent:', payload);
 
     const loadingToastId = toast.loading('Processing your order...');
 
     try {
-      const response = await api.post('/api/payment/initialize', orderData);
+      // 2. Explicitly use the full URL to bypass any Axios config issues
+      const response = await axios.post(
+        'https://backend-lumii.vercel.app/api/payment/initialize',
+        payload,
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+
       toast.dismiss(loadingToastId);
 
-      if (response.data?.success && response.data?.authorizationUrl) {
-        window.location.href = response.data.authorizationUrl;
+      if (response.data.data?.authorization_url) {
+        window.location.href = response.data.data.authorization_url;
       } else {
         toast.error(response.data?.message || 'Could not initiate payment.');
       }
@@ -123,7 +112,7 @@ const CartPage = () => {
       console.error('Checkout Form Submission Error:', error);
 
       // Use custom error message from API interceptor if available
-      const errorMessage = error.customMessage || error.response?.data?.message || 'An error occurred during payment processing. Please try again.';
+      const errorMessage = error.response?.data?.message || 'An error occurred during payment processing. Please try again.';
 
       toast.error(errorMessage);
     }
