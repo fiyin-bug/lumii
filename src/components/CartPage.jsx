@@ -110,7 +110,7 @@ const CartPage = () => {
     const loadingToastId = toast.loading('Processing your order...');
 
     try {
-      const response = await api.post('/api/payment/initialize', orderData);
+      const response = await api.post('/payment/initialize', orderData);
       toast.dismiss(loadingToastId);
 
       if (response.data?.success && response.data?.authorizationUrl) {

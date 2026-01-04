@@ -6,8 +6,8 @@ import axios from 'axios';
 const isDev = import.meta.env.DEV;
 
 // Use your permanent Vercel domain instead of the temporary deployment ID
-const productionUrl = 'https://backend-lumii.vercel.app';
-const localUrl = 'http://localhost:5000'; // Standard local backend port
+const productionUrl = 'https://backend-lumii.vercel.app/api';
+const localUrl = 'http://localhost:5000/api'; // Standard local backend port
 
 // ------------------------
 // Axios instance
