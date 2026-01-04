@@ -94,15 +94,14 @@ const CartPage = () => {
     const loadingToastId = toast.loading('Processing your order...');
 
     try {
-      // 2. Use a direct URL to rule out Axios config issues
-      const response = await axios.post(
-        'https://backend-lumii.vercel.app/api/payment/initialize',
-        payload,
-        {
-          headers: { 'Content-Type': 'application/json' },
-          timeout: 10000 // 10 seconds
+      const response = await axios({
+        method: 'post',
+        url: 'https://backend-lumii.vercel.app/api/payment/initialize',
+        data: payload,
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
 
       toast.dismiss(loadingToastId);
 
@@ -114,6 +113,9 @@ const CartPage = () => {
     } catch (error) {
       toast.dismiss(loadingToastId);
       console.error('Checkout Form Submission Error:', error);
+
+      // If you see a response here, the server is NOT crashing
+      console.error("Server Response:", error.response?.data);
 
       // Use custom error message from API interceptor if available
       const errorMessage = error.response?.data?.message || 'An error occurred during payment processing. Please try again.';
