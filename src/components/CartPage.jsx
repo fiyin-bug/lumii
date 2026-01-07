@@ -84,15 +84,12 @@ const CartPage = () => {
       return;
     }
 
+    // Backend expects: email, firstName, lastName, phone, shippingAddress, items
     const payload = {
       email: formData.email.trim(),
-      amount: Math.round(amount * 100), // Convert to kobo/cents
-      customerInfo: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone,
-        email: formData.email.trim(),
-      },
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
       shippingAddress: {
         street: formData.street,
         city: formData.city,
@@ -100,7 +97,7 @@ const CartPage = () => {
         postalCode: formData.postalCode,
         country: formData.country,
       },
-      cartItems: cartItems.map(item => ({
+      items: cartItems.map(item => ({
         id: item.id,
         name: item.name,
         price: parseFloat(item.price.replace(/[^0-9.-]+/g, '')),
@@ -109,7 +106,9 @@ const CartPage = () => {
       })),
     };
 
-    console.log('Payload being sent:', payload);
+    console.log('=== PAYMENT DEBUG ===');
+    console.log('Payload:', JSON.stringify(payload, null, 2));
+    console.log('===================');
 
     const loadingToastId = toast.loading('Processing your order...');
 
@@ -118,21 +117,18 @@ const CartPage = () => {
 
       toast.dismiss(loadingToastId);
 
-      if (response.data?.data?.authorization_url) {
-        window.location.href = response.data.data.authorization_url;
+      // Backend returns { success: true, authorizationUrl: "..." }
+      if (response.data?.success && response.data?.authorizationUrl) {
+        window.location.href = response.data.authorizationUrl;
       } else {
         toast.error(response.data?.message || 'Could not initiate payment.');
       }
     } catch (error) {
       toast.dismiss(loadingToastId);
       console.error('Checkout Form Submission Error:', error);
-
-      // If you see a response here, the server is NOT crashing
       console.error("Server Response:", error.response?.data);
 
-      // Use custom error message from API interceptor if available
       const errorMessage = error.response?.data?.message || error.customMessage || 'An error occurred during payment processing. Please try again.';
-
       toast.error(errorMessage);
     }
   };
