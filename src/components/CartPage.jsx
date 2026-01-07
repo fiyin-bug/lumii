@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import api from '../api';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -84,42 +84,51 @@ const CartPage = () => {
       return;
     }
 
+    // Backend expects: email, firstName, lastName, phone, shippingAddress, items
     const payload = {
       email: formData.email.trim(),
-      amount: Math.round(amount * 100), // Convert to kobo/cents
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
+      shippingAddress: {
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.postalCode,
+        country: formData.country,
+      },
+      items: cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: parseFloat(item.price.replace(/[^0-9.-]+/g, '')),
+        quantity: item.quantity,
+        image: item.images ? item.images[0] : item.image,
+      })),
     };
 
-    console.log('Payload being sent:', payload);
+    console.log('=== PAYMENT DEBUG ===');
+    console.log('Payload:', JSON.stringify(payload, null, 2));
+    console.log('===================');
 
     const loadingToastId = toast.loading('Processing your order...');
 
     try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://backend-lumii.vercel.app/api/payment/initialize',
-        data: payload,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await api.post('/api/payment/initialize', payload);
 
       toast.dismiss(loadingToastId);
 
-      if (response.data?.data?.authorization_url) {
-        window.location.href = response.data.data.authorization_url;
+      // Backend returns { success: true, authorizationUrl: "..." }
+      if (response.data?.success && response.data?.authorizationUrl) {
+        window.location.href = response.data.authorizationUrl;
       } else {
         toast.error(response.data?.message || 'Could not initiate payment.');
       }
     } catch (error) {
       toast.dismiss(loadingToastId);
       console.error('Checkout Form Submission Error:', error);
-
-      // If you see a response here, the server is NOT crashing
       console.error("Server Response:", error.response?.data);
 
-      // Use custom error message from API interceptor if available
-      const errorMessage = error.response?.data?.message || 'An error occurred during payment processing. Please try again.';
-
+      const errorMessage = error.response?.data?.message || error.customMessage || 'An error occurred during payment processing. Please try again.';
       toast.error(errorMessage);
     }
   };

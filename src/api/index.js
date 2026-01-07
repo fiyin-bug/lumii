@@ -5,26 +5,22 @@ import axios from 'axios';
 // ------------------------
 const isDev = import.meta.env.DEV;
 
-// Use your permanent Vercel domain instead of the temporary deployment ID
-const productionUrl = 'https://backend-lumii.vercel.app';
-const localUrl = 'http://localhost:5000'; // Standard local backend port
+// Use environment variable if available, otherwise fallback to production URL
+const apiUrl = import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app';
 
 // ------------------------
 // Axios instance
 // ------------------------
 const api = axios.create({
-  // Automatically switch between local and production based on where you are running
-  baseURL: isDev ? productionUrl : productionUrl, 
-  timeout: 30000, 
+  baseURL: apiUrl,
+  timeout: 30000,
   headers: { 'Content-Type': 'application/json' },
 });
 
 // ------------------------
 // Development logging
 // ------------------------
-if (isDev) {
-  console.log('🚀 Running in development mode - API calls will go to:', api.defaults.baseURL);
-}
+console.log('🚀 API calls will go to:', api.defaults.baseURL);
 
 // ------------------------
 // Request interceptor
@@ -56,7 +52,7 @@ api.interceptors.response.use(
     // Network error (no response)
     if (!error.response) {
       error.customMessage =
-        'Network error. Please check your connection or verify the backend is active at ' + productionUrl;
+        'Network error. Please check your connection or verify the backend is active at ' + apiUrl;
     } else {
       const status = error.response.status;
 
