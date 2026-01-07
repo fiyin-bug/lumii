@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import api from '../api';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -87,6 +87,26 @@ const CartPage = () => {
     const payload = {
       email: formData.email.trim(),
       amount: Math.round(amount * 100), // Convert to kobo/cents
+      customerInfo: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        email: formData.email.trim(),
+      },
+      shippingAddress: {
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.postalCode,
+        country: formData.country,
+      },
+      cartItems: cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: parseFloat(item.price.replace(/[^0-9.-]+/g, '')),
+        quantity: item.quantity,
+        image: item.images ? item.images[0] : item.image,
+      })),
     };
 
     console.log('Payload being sent:', payload);
@@ -94,14 +114,7 @@ const CartPage = () => {
     const loadingToastId = toast.loading('Processing your order...');
 
     try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://backend-lumii.vercel.app/api/payment/initialize',
-        data: payload,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await api.post('/api/payment/initialize', payload);
 
       toast.dismiss(loadingToastId);
 
@@ -118,7 +131,7 @@ const CartPage = () => {
       console.error("Server Response:", error.response?.data);
 
       // Use custom error message from API interceptor if available
-      const errorMessage = error.response?.data?.message || 'An error occurred during payment processing. Please try again.';
+      const errorMessage = error.response?.data?.message || error.customMessage || 'An error occurred during payment processing. Please try again.';
 
       toast.error(errorMessage);
     }
