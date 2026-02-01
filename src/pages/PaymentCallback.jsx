@@ -13,54 +13,54 @@ const PaymentCallback = () => {
   const { clearCart } = useCart();
 
   useEffect(() => {
+    // Safety check: only run verification once
     if (reference && !hasVerified) {
       const verifyPayment = async () => {
         try {
-          console.log(`Verifying payment for reference: ${reference}`);
+          console.log(`📡 Verifying payment: ${reference}`);
+          
+          // Request to your backend
           const response = await api.get(`/payment/verify/${reference}`);
-          console.log('API response:', response.data);
+          
           setIsVerifying(false);
           setHasVerified(true);
 
           if (response.data.success) {
-            toast.success('✅ Payment successful!');
+            console.log('✅ Payment Confirmed');
+            clearCart(); // Clean up the cart on success
+            toast.success('Payment successful!');
+            
+            // Navigate to success page
             setTimeout(() => {
-              console.log(`Navigating to /payment/success?reference=${reference}`);
               navigate(`/payment/success?reference=${reference}`);
-            }, 2000);
+            }, 1500);
           } else {
-            toast.error(`❌ Payment failed: ${response.data.message}`);
+            const errorMsg = response.data.message || 'Payment failed';
+            toast.error(`❌ ${errorMsg}`);
             setTimeout(() => {
-              console.log(`Navigating to /order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(response.data.message || 'payment_failed')}`);
-              navigate(`/order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(response.data.message || 'payment_failed')}`);
+              navigate(`/order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(errorMsg)}`);
             }, 2000);
           }
         } catch (error) {
           setIsVerifying(false);
           setHasVerified(true);
-          console.error('Verification error:', error.response?.data || error.message);
+          console.error('❌ Verification Error:', error.response?.data || error.message);
 
-          let errorMessage = 'Something went wrong verifying the payment.';
-          if (!error.response) {
-            // Network error - server not reachable
-            errorMessage = 'Unable to connect to payment server. Please check your internet connection and try again.';
-          } else if (error.response?.data?.message) {
-            errorMessage = error.response.data.message;
-          }
-
+          const errorMessage = error.response?.data?.message || 'Unable to connect to payment server.';
           toast.error(`⚠️ ${errorMessage}`);
+          
           setTimeout(() => {
-            console.log(`Navigating to /order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(errorMessage)}`);
             navigate(`/order-status?status=failed&reference=${reference}&reason=${encodeURIComponent(errorMessage)}`);
           }, 2000);
         }
       };
 
       verifyPayment();
-    } else if (!reference) {
+    } else if (!reference && !hasVerified) {
       setIsVerifying(false);
-      toast.error('No transaction reference provided.');
-      console.log('No reference provided, navigating to /cart');
+      console.warn('⚠️ No reference found in URL');
+      // If we land here without a reference, something went wrong with the redirect
+      toast.error('Transaction reference missing.');
       navigate('/cart');
     }
   }, [reference, navigate, clearCart, hasVerified]);
@@ -71,40 +71,28 @@ const PaymentCallback = () => {
         <div className="text-center">
           <div className="mb-6">
             {isVerifying ? (
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--pinkish-brown)] mx-auto"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             ) : (
               <div className="text-4xl mb-4">
                 {hasVerified ? '✅' : '❌'}
               </div>
             )}
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
             {isVerifying ? 'Verifying Payment' : 'Verification Complete'}
           </h2>
+          
           <p className="text-gray-600 mb-6">
             {isVerifying
               ? 'Please wait while we confirm your transaction...'
-              : 'Redirecting you to the order status page...'}
+              : 'Redirecting you to the status page...'}
           </p>
+
           {reference && (
-            <div className="mb-4">
-              <p className="text-sm text-gray-500 mb-2">
-                Reference: <code className="bg-gray-100 px-2 py-1 rounded">{reference}</code>
-              </p>
-              <p className="text-xs text-gray-400">
-                If redirect doesn't work, copy this URL and paste in browser:
-              </p>
-              <p className="text-xs text-blue-600 break-all">
-                http://localhost:5174/payment/callback?reference={reference}
-              </p>
-            </div>
-          )}
-          {!reference && (
-            <div className="text-red-600">
-              <p>No transaction reference found in URL.</p>
-              <p className="text-sm mt-2">
-                Make sure Paystack redirects to: <code>http://localhost:5174/payment/callback?reference=YOUR_REFERENCE</code>
-              </p>
+            <div className="bg-gray-50 p-4 rounded-md border border-gray-100">
+              <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Transaction Reference</p>
+              <code className="text-sm text-gray-700 break-all">{reference}</code>
             </div>
           )}
         </div>
