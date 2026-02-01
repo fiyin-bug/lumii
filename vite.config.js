@@ -9,9 +9,10 @@ export default defineConfig({
     historyApiFallback: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://127.0.0.1:5000', 
         changeOrigin: true,
-        secure: false, // Accept self-signed certificates
+        secure: false,
+        // REWRITE REMOVED: Now Frontend '/api/path' goes to Backend '/api/path'
       },
     },
   },

@@ -1,12 +1,17 @@
 import axios from 'axios';
 
 // ------------------------
-// Backend URLs
+// Backend URLs & Environment Logic
 // ------------------------
-const isDev = import.meta.env.DEV;
 
-// Use environment variable if available, otherwise fallback to production URL
-const apiUrl = import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app';
+/**
+ * FIX: During development, we use a relative path '/api'.
+ * This forces the request through the Vite Proxy (localhost:5174 -> localhost:5000).
+ * In production, it falls back to your Vercel URL.
+ */
+const apiUrl = import.meta.env.DEV 
+  ? '/api' 
+  : (import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app');
 
 // ------------------------
 // Axios instance
@@ -20,16 +25,18 @@ const api = axios.create({
 // ------------------------
 // Development logging
 // ------------------------
-console.log('🚀 API calls will go to:', api.defaults.baseURL);
+if (import.meta.env.DEV) {
+  console.log('🚀 API mode: DEVELOPMENT (Using Vite Proxy)');
+  console.log('🔗 Base URL set to:', api.defaults.baseURL);
+}
 
 // ------------------------
 // Request interceptor
 // ------------------------
 api.interceptors.request.use(
   (config) => {
-    // Ensure the URL starts with /api if your backend routes require it
-    // If your backend endpoints already start with /api (like /api/payment/initialize), this is perfect
-    console.log('➡️ API Request:', config.method?.toUpperCase(), config.url);
+    // Helpful for debugging in the console
+    console.log(`➡️ ${config.method?.toUpperCase()} request to: ${config.url}`);
     return config;
   },
   (error) => {
@@ -52,7 +59,7 @@ api.interceptors.response.use(
     // Network error (no response)
     if (!error.response) {
       error.customMessage =
-        'Network error. Please check your connection or verify the backend is active at ' + apiUrl;
+        'Network error. Is the backend running at localhost:5000?';
     } else {
       const status = error.response.status;
 

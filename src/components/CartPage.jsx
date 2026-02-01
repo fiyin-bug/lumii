@@ -1,4 +1,3 @@
-// src/pages/CartPage.jsx
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
@@ -77,16 +76,10 @@ const CartPage = () => {
       return;
     }
 
-    // 1. Ensure data is valid before sending
-    const amount = parseFloat(subtotal);
-    if (isNaN(amount) || !formData.email) {
-      console.error("Invalid form data");
-      return;
-    }
-
-    // Backend expects: email, firstName, lastName, phone, shippingAddress, items
+    // 1. Prepare data for Paystack (Backend expects this)
     const payload = {
       email: formData.email.trim(),
+      amount: subtotal, // Correctly passing the subtotal for the backend to use
       firstName: formData.firstName,
       lastName: formData.lastName,
       phone: formData.phone,
@@ -100,35 +93,34 @@ const CartPage = () => {
       items: cartItems.map(item => ({
         id: item.id,
         name: item.name,
-        price: parseFloat(item.price.replace(/[^0-9.-]+/g, '')),
+        // Robust price parsing to handle strings or numbers
+        price: typeof item.price === 'string' 
+          ? parseFloat(item.price.replace(/[^0-9.-]+/g, '')) 
+          : item.price,
         quantity: item.quantity,
-        image: item.images ? item.images[0] : item.image,
       })),
     };
 
-    console.log('=== PAYMENT DEBUG ===');
-    console.log('Payload:', JSON.stringify(payload, null, 2));
-    console.log('===================');
-
-    const loadingToastId = toast.loading('Processing your order...');
+    const loadingToastId = toast.loading('Redirecting to secure payment...');
 
     try {
-      const response = await api.post('/api/payment/initialize', payload);
+      // This sends a POST to http://localhost:5174/api/payment/initialize
+      // Vite Proxy rewrites it to http://localhost:5000/payment/initialize
+      const response = await api.post('/payment/initialize', payload);
 
       toast.dismiss(loadingToastId);
 
-      // Backend returns { success: true, authorizationUrl: "..." }
       if (response.data?.success && response.data?.authorizationUrl) {
+        // Redirect user to Paystack Checkout
         window.location.href = response.data.authorizationUrl;
       } else {
         toast.error(response.data?.message || 'Could not initiate payment.');
       }
     } catch (error) {
       toast.dismiss(loadingToastId);
-      console.error('Checkout Form Submission Error:', error);
-      console.error("Server Response:", error.response?.data);
-
-      const errorMessage = error.response?.data?.message || error.customMessage || 'An error occurred during payment processing. Please try again.';
+      console.error('Checkout Error:', error);
+      
+      const errorMessage = error.response?.data?.message || error.customMessage || 'Payment failed. Please try again.';
       toast.error(errorMessage);
     }
   };
@@ -136,8 +128,6 @@ const CartPage = () => {
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
   };
-
-  console.log('Cart Items:', cartItems, 'Cart Count:', cartCount);
 
   return (
     <div className="py-12 md:py-20 bg-gray-50 min-h-[calc(100vh-4rem)]">
@@ -152,284 +142,81 @@ const CartPage = () => {
             <p className="text-gray-500 mb-6">Your cart is currently empty.</p>
             <Link
               to="/jewelry"
-              className="group inline-flex items-center gap-2 bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white px-8 py-3 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-semibold"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#C19A6B] to-[#704214] text-white px-8 py-3 rounded-lg hover:shadow-lg transition-all font-semibold"
             >
-              <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
               Continue Shopping
             </Link>
           </div>
         ) : (
           <form onSubmit={handleFormSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-12">
             <div className="lg:col-span-2 space-y-8">
+              {/* Item Review Section */}
               <div className="bg-white rounded-lg shadow p-4 md:p-6">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-3">
                   Review Your Items ({cartCount})
                 </h2>
                 <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                   {cartItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b pb-4 last:border-b-0"
-                    >
+                    <div key={item.id} className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b pb-4 last:border-b-0">
                       <div className="flex items-center gap-4 flex-grow w-full sm:w-auto">
                         <img
                           src={item.images ? item.images[0] : item.image}
                           alt={item.name}
-                          className="w-16 h-16 object-cover rounded cursor-pointer hover:scale-105 transition-transform duration-300"
+                          className="w-16 h-16 object-cover rounded cursor-pointer"
                           onClick={() => handleProductClick(item.id)}
                         />
-                        <div className="flex-grow">
+                        <div>
                           <p className="font-medium text-gray-800">{item.name}</p>
-                          <p className="text-sm text-gray-500">
-                            NGN {parseFloat(item.price.replace(/[^0-9.-]+/g, '')).toFixed(2)}
-                          </p>
+                          <p className="text-sm text-gray-500">NGN {subtotal.toFixed(2)}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                        <div className="flex items-center border border-[var(--pinkish-brown)]/30 rounded-lg overflow-hidden">
-                          <button
-                            type="button"
-                            onClick={() => updateQuantity(item.id, -1)}
-                            className="px-3 py-2 text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)]/10 disabled:opacity-50 transition-colors"
-                            disabled={item.quantity <= 1}
-                          >
-                            <i className="fas fa-minus text-xs"></i>
-                          </button>
-                          <span className="px-4 py-2 text-sm font-semibold bg-[var(--desert-sand)]/5 border-x border-[var(--pinkish-brown)]/20">{item.quantity}</span>
-                          <button
-                            type="button"
-                            onClick={() => updateQuantity(item.id, 1)}
-                            className="px-3 py-2 text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)]/10 transition-colors"
-                          >
-                            <i className="fas fa-plus text-xs"></i>
-                          </button>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center border rounded-lg overflow-hidden">
+                          <button type="button" onClick={() => updateQuantity(item.id, -1)} className="px-3 py-1 hover:bg-gray-100">-</button>
+                          <span className="px-3 py-1 border-x">{item.quantity}</span>
+                          <button type="button" onClick={() => updateQuantity(item.id, 1)} className="px-3 py-1 hover:bg-gray-100">+</button>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => removeFromCart(item.id)}
-                          className="group p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-300"
-                        >
-                          <i className="fas fa-trash-alt group-hover:scale-110 transition-transform duration-300"></i>
+                        <button type="button" onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700">
+                          <i className="fas fa-trash-alt"></i>
                         </button>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="mt-6 text-right">
-                  <button
-                    type="button"
-                    onClick={clearCart}
-                    className="group inline-flex items-center gap-2 text-sm text-gray-500 hover:text-red-600 underline hover:no-underline transition-all duration-300"
-                  >
-                    <i className="fas fa-trash-alt group-hover:scale-110 transition-transform duration-300"></i>
-                    Clear Cart
-                  </button>
-                </div>
               </div>
 
+              {/* Shipping Details Section */}
               <div className="bg-white rounded-lg shadow p-4 md:p-6">
                 <h2 className="text-xl font-semibold text-gray-700 mb-5 border-b pb-3">Your Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.firstName ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.lastName ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
-                  </div>
-                  <div className="md:col-span-2">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.email ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
-                  </div>
-                  <div className="md:col-span-2">
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.phone ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
-                  </div>
-                  <h3 className="md:col-span-2 text-lg font-medium text-gray-800 mt-4 pt-4 border-t">
-                    Shipping Address
-                  </h3>
-                  <div className="md:col-span-2">
-                    <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-1">
-                      Street Address
-                    </label>
-                    <input
-                      type="text"
-                      id="street"
-                      name="street"
-                      value={formData.street}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.street ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.street && <p className="text-red-500 text-xs mt-1">{formErrors.street}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.city ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
-                      State
-                    </label>
-                    <input
-                      type="text"
-                      id="state"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.state ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">
-                      Postal Code
-                    </label>
-                    <input
-                      type="text"
-                      id="postalCode"
-                      name="postalCode"
-                      value={formData.postalCode}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-[var(--pinkish-brown)] focus:border-[var(--pinkish-brown)] transition-colors duration-300 ${
-                        formErrors.postalCode ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    />
-                    {formErrors.postalCode && <p className="text-red-500 text-xs mt-1">{formErrors.postalCode}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      id="country"
-                      name="country"
-                      value={formData.country}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border bg-gray-100 rounded-md shadow-sm"
-                      readOnly
-                    />
-                  </div>
+                  <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleInputChange} className="p-2 border rounded" required />
+                  <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleInputChange} className="p-2 border rounded" required />
+                  <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleInputChange} className="p-2 border rounded md:col-span-2" required />
+                  <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleInputChange} className="p-2 border rounded md:col-span-2" required />
+                  <input type="text" name="street" placeholder="Street Address" value={formData.street} onChange={handleInputChange} className="p-2 border rounded md:col-span-2" required />
+                  <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleInputChange} className="p-2 border rounded" required />
+                  <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleInputChange} className="p-2 border rounded" required />
+                  <input type="text" name="postalCode" placeholder="Postal Code" value={formData.postalCode} onChange={handleInputChange} className="p-2 border rounded" required />
+                  <input type="text" name="country" value={formData.country} readOnly className="p-2 border rounded bg-gray-50" />
                 </div>
               </div>
             </div>
 
+            {/* Summary Sidebar */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow p-4 md:p-6 sticky top-20">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-3">Order Summary</h2>
-                <div className="space-y-3 mb-5">
-                  <div className="flex justify-between text-gray-600">
-                    <span>Subtotal</span>
-                    <span>NGN {subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Shipping</span>
-                    <span className="text-green-600">FREE</span>
-                  </div>
-                </div>
-                <div className="border-t pt-4">
-                  <div className="flex justify-between font-bold text-gray-800 text-lg">
-                    <span>Total</span>
-                    <span>NGN {subtotal.toFixed(2)}</span>
-                  </div>
-                </div>
+                <div className="flex justify-between mb-2"><span>Subtotal</span><span>NGN {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between mb-4"><span className="text-green-600">Shipping</span><span className="text-green-600">FREE</span></div>
+                <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6"><span>Total</span><span>NGN {subtotal.toFixed(2)}</span></div>
+                
                 <button
                   type="submit"
-                  className="group relative w-full bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-4 px-6 rounded-xl hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 overflow-hidden font-semibold mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full bg-gradient-to-r from-[#C19A6B] to-[#704214] text-white py-4 rounded-xl font-bold hover:shadow-xl transition-all disabled:opacity-50"
                   disabled={cartCount === 0}
                 >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    <span>Place Order & Proceed to Payment</span>
-                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  Place Order & Pay
                 </button>
-                <Link to="/jewelry" className="group block text-center text-[var(--pinkish-brown)] hover:text-[var(--pinkish-brown-dark)] hover:underline mt-4 text-sm transition-colors duration-300">
-                  <span className="flex items-center justify-center gap-1">
-                    <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Continue Shopping
-                  </span>
-                </Link>
               </div>
             </div>
           </form>
