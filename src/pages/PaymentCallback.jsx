@@ -95,7 +95,7 @@ const PaymentCallback = () => {
                 If redirect doesn't work, copy this URL and paste in browser:
               </p>
               <p className="text-xs text-blue-600 break-all">
-                http://localhost:5174/payment/callback?reference={reference}
+                {window.location.origin}/payment/callback?reference={reference}
               </p>
             </div>
           )}
@@ -103,7 +103,7 @@ const PaymentCallback = () => {
             <div className="text-red-600">
               <p>No transaction reference found in URL.</p>
               <p className="text-sm mt-2">
-                Make sure Paystack redirects to: <code>http://localhost:5174/payment/callback?reference=YOUR_REFERENCE</code>
+                Make sure Paystack redirects to: <code>{window.location.origin}/payment/callback?reference=YOUR_REFERENCE</code>
               </p>
             </div>
           )}
