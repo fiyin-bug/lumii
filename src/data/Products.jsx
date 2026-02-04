@@ -83,7 +83,6 @@ export const allJewelryProducts = [
    { id: 71, name: "LPC 115", price: "5000", image: "/images/Rings/LPC 115.jpg", category: "Rings" },
    { id: 72, name: "LPC 133", price: "5000", image: "/images/Rings/LPC 133.jpg", category: "Rings" },
    { id: 73, name: "LPC 201 C", price: "8,500", image: "/images/Rings/LPC 201 C.jpg", category: "Rings" },
-   { id: 73, name: "LPC 201 D", price: "7,000", image: "/images/Rings/LPC 201 D.jpg", category: "Rings" },
    { id: 74, name: "LPC 201 E", price: "8000", image: "/images/Rings/LPC 201 E.jpg", category: "Rings" },
    { id: 75, name: "LPC 201 F", price: "8,000", image: "/images/Rings/LPC 201 F.jpg", category: "Rings" },
    { id: 76, name: "LPC 201 G", price: "", image: "/images/Rings/LPC 201 G.jpg", category: "Rings" },
@@ -91,8 +90,6 @@ export const allJewelryProducts = [
    { id: 78, name: "LPC 201 I", price: "7,500", image: "/images/Rings/LPC 201 I.jpg", category: "Rings" },
    { id: 79, name: "LPC 201 J", price: "8,000", image: "/images/Rings/LPC 201 J.jpg", category: "Rings" },
    { id: 80, name: "LPC 201", price: "8000", image: "/images/Rings/LPC 201.jpg", category: "Rings" },
-   { id: 81, name: "LPC 311 ", price: "11,000", image: "/images/Rings/LPC 312 A.jpg", category: "Rings" },
-   
    { id: 81, name: "LPC 312 E", price: "11,000", image: "/images/Rings/LPC 312 E.jpg", category: "Rings" },
    
    { id: 82, name: "LPC 313 A", price: "5000", image: "/images/Rings/LPC 313 A.jpg", category: "Rings" },
