@@ -10,7 +10,7 @@ import axios from 'axios';
  * In production, it falls back to your Vercel URL.
  */
 const apiUrl = import.meta.env.DEV
-  ? '/api'
+  ? ''  // Use relative URLs in dev (proxied by Vite)
   : (import.meta.env.VITE_API_URL || 'https://backend-lumii-plm7dk0yz-davids-projects-b37cdfcb.vercel.app');
 
 // ------------------------

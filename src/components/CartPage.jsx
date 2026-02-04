@@ -108,7 +108,7 @@ const CartPage = () => {
     const loadingToastId = toast.loading('Connecting to secure payment...');
 
     try {
-      const response = await api.post('/payment/initialize', payload);
+      const response = await api.post('/api/payment/initialize', payload);
       toast.dismiss(loadingToastId);
 
       if (response.data?.success && response.data?.authorizationUrl) {
