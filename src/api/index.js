@@ -9,9 +9,9 @@ import axios from 'axios';
  * This forces the request through the Vite Proxy (localhost:5174 -> localhost:5000).
  * In production, it falls back to your Vercel URL.
  */
-const apiUrl = import.meta.env.DEV 
-  ? '/api' 
-  : (import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app');
+const apiUrl = import.meta.env.DEV
+  ? '/api'
+  : (import.meta.env.VITE_API_URL || 'https://backend-lumii-plm7dk0yz-davids-projects-b37cdfcb.vercel.app');
 
 // ------------------------
 // Axios instance
