@@ -5,19 +5,20 @@ import axios from 'axios';
 // ------------------------
 
 /**
- * FIX: During development, we use a relative path '/api'.
- * This forces the request through the Vite Proxy (localhost:5174 -> localhost:5000).
- * In production, it falls back to your Vercel URL.
+ * Dynamic API URL configuration:
+ * - Development: Uses '/api' prefix (proxied by Vite to localhost:5000)
+ * - Production: Uses VITE_API_URL env var or fallback to production URL
  */
-const apiUrl = import.meta.env.DEV
-  ? ''  // Use relative URLs in dev (proxied by Vite)
+const isDev = import.meta.env.DEV;
+const API_BASE_URL = isDev
+  ? '/api'  // Uses the Vite Proxy you already have set up
   : (import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app');
 
 // ------------------------
 // Axios instance
 // ------------------------
 const api = axios.create({
-  baseURL: apiUrl,
+  baseURL: API_BASE_URL,
   timeout: 30000,
   headers: { 'Content-Type': 'application/json' },
 });
