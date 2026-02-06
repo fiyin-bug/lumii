@@ -4,17 +4,18 @@ import toast from 'react-hot-toast';
 
 const CartContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => {
   return useContext(CartContext);
 };
 
-const getInitialCart = () => {
-  const savedCart = localStorage.getItem('cartItems');
-  const cart = savedCart ? JSON.parse(savedCart) : [];
-  return cart;
-};
-
 export const CartProvider = ({ children }) => {
+  const getInitialCart = () => {
+    const savedCart = localStorage.getItem('cartItems');
+    const cart = savedCart ? JSON.parse(savedCart) : [];
+    return cart;
+  };
+
   const [cartItems, setCartItems] = useState(getInitialCart);
 
   useEffect(() => {

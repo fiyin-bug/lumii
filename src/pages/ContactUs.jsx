@@ -35,8 +35,6 @@ export const ContactUs = () => {
     },
   }
 
-  const floatingIcons = [Music, Headphones, Mic]
-
   return (
     <div className="bg-gradient-to-br from-pink-50 via-white to-rose-50 min-h-screen flex items-center justify-center px-4 py-12">
       <motion.div

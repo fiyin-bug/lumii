@@ -7,11 +7,11 @@ const ImageModal = ({ isOpen, onClose, imageSrc, altText }) => {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = React.useCallback((e) => {
     if (e.key === 'Escape') {
       onClose();
     }
-  };
+  }, [onClose]);
 
   React.useEffect(() => {
     if (isOpen) {
@@ -26,7 +26,7 @@ const ImageModal = ({ isOpen, onClose, imageSrc, altText }) => {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, handleKeyDown]);
 
   if (!isOpen) return null;
 
