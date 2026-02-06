@@ -12,7 +12,7 @@ import axios from 'axios';
 const isDev = import.meta.env.DEV;
 const API_BASE_URL = isDev
   ? ''  // Empty baseURL - requests to /api/... get proxied by Vite
-  : (import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app');
+  : (import.meta.env.VITE_API_URL || 'https://backend-lumii-git-main-davids-projects-b37cdfcb.vercel.app');
 
 // ------------------------
 // Axios instance
