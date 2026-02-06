@@ -11,7 +11,7 @@ import axios from 'axios';
  */
 const apiUrl = import.meta.env.DEV
   ? ''  // Use relative URLs in dev (proxied by Vite)
-  : (import.meta.env.VITE_API_URL || 'https://backend-lumii-plm7dk0yz-davids-projects-b37cdfcb.vercel.app');
+  : (import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app');
 
 // ------------------------
 // Axios instance
