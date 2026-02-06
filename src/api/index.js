@@ -6,12 +6,12 @@ import axios from 'axios';
 
 /**
  * Dynamic API URL configuration:
- * - Development: Uses '/api' prefix (proxied by Vite to localhost:5000)
+ * - Development: Empty baseURL (requests made to /api/... get proxied by Vite)
  * - Production: Uses VITE_API_URL env var or fallback to production URL
  */
 const isDev = import.meta.env.DEV;
 const API_BASE_URL = isDev
-  ? '/api'  // Uses the Vite Proxy you already have set up
+  ? ''  // Empty baseURL - requests to /api/... get proxied by Vite
   : (import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app');
 
 // ------------------------
