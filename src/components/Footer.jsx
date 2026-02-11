@@ -56,7 +56,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <i className="fas fa-phone-alt mr-2 text-[#e8cfb2]"></i>
-                <span className="text-[#cfbca9]">+2347010583734</span>
+                <span className="text-[#cfbca9]">09126463659</span>
               </li>
               <li className="flex items-center">
                 <i className="fas fa-envelope mr-2 text-[#e8cfb2]"></i>

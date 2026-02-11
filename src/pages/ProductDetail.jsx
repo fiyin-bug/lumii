@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { allJewelryProducts } from '../data/Products';
 import { useCart } from '../context/CartContext';
+import { formatNaira } from '../utils/price';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -100,7 +101,7 @@ const ProductDetail = () => {
                 {product.name}
               </h1>
               <p className="text-3xl font-bold text-[var(--pinkish-brown)] mb-6">
-                {product.price}
+                {formatNaira(product.price)}
               </p>
             </div>
 

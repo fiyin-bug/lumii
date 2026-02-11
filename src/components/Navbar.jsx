@@ -32,7 +32,7 @@ const Navbar = () => {
         {/* Logo/Brand Name */}
         <div className="flex items-center">
          <Link to="/" className="text-xl md:text-2xl font-serif font-bold text-[var(--pinkish-brown)] tracking-wide">
-            Lumi Pretty Collection
+            Lumis Pretty Collection
           </Link>
         </div>
 

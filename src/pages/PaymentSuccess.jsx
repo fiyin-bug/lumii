@@ -92,7 +92,7 @@ const PaymentSuccess = () => {
         {/* Footer Branding */}
         <div className="mt-8 text-center">
           <p className="text-xs text-gray-400">
-            Lumii Pretty Collection 💎 | Thank you for choosing us!
+            Lumis Pretty Collection 💎 | Thank you for choosing us!
           </p>
         </div>
       </div>

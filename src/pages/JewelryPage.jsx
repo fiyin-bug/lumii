@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { allJewelryProducts } from '../data/Products';
 import { useCart } from '../context/CartContext';
+import { formatNaira } from '../utils/price';
 
 const JewelryPage = () => {
   const { category } = useParams();
@@ -99,7 +100,7 @@ const JewelryPage = () => {
                   <h3 className="text-lg font-medium text-gray-800 mb-1 flex-grow min-h-[3rem]">
                     {product.name}
                   </h3>
-                  <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{product.price}</p>
+                  <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{formatNaira(product.price)}</p>
                   <button
                     onClick={(e) => handleAddToCart(e, product)}
                     className="group relative w-full bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-3 px-6 rounded-xl font-semibold hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 overflow-hidden mt-auto"

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { allJewelryProducts } from '../data/Products';
+import { formatNaira } from '../utils/price';
 
 const FeaturedCollections = () => {
   const navigate = useNavigate();
@@ -114,7 +115,7 @@ const FeaturedCollections = () => {
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <h3 className="text-lg font-medium text-[#3f342a] mb-1 flex-grow min-h-[3rem]">{item.name}</h3>
-                  <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{item.price || 'Price on request'}</p>
+                  <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{formatNaira(item.price)}</p>
                   <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:gap-2">
                     <button
                       onClick={(e) => handleAddToCart(e, item)}

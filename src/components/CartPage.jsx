@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import api from '../api';
+import { formatNaira, parsePrice } from '../utils/price';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -75,12 +76,7 @@ const CartPage = () => {
 
     // Robust item formatting - prevents "NaN" prices from breaking Paystack
     const formattedItems = cartItems.map(item => {
-      let priceNum = 0;
-      if (typeof item.price === 'string') {
-        priceNum = parseFloat(item.price.replace(/[^0-9.]/g, ''));
-      } else {
-        priceNum = item.price;
-      }
+      const priceNum = parsePrice(item.price);
 
       return {
         id: item.id,
@@ -92,7 +88,7 @@ const CartPage = () => {
 
     const payload = {
       email: formData.email.trim().toLowerCase(),
-      amount: Number(subtotal), 
+      amount: parsePrice(subtotal),
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       phone: formData.phone.trim(),
@@ -162,7 +158,7 @@ const CartPage = () => {
                         />
                         <div>
                           <p className="font-medium">{item.name}</p>
-                          <p className="text-sm text-gray-500">NGN {Number(item.price).toLocaleString()}</p>
+                          <p className="text-sm text-gray-500">{formatNaira(item.price)}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
@@ -217,10 +213,10 @@ const CartPage = () => {
             <div className="xl:col-span-1">
               <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-24">
                 <h2 className="text-xl font-semibold mb-4 border-b pb-2">Order Summary</h2>
-                <div className="flex justify-between mb-2"><span>Subtotal</span><span>NGN {subtotal.toLocaleString()}</span></div>
+                <div className="flex justify-between mb-2"><span>Subtotal</span><span>{formatNaira(subtotal)}</span></div>
                 <div className="flex justify-between mb-4 text-green-600"><span>Shipping</span><span>FREE</span></div>
                 <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6 text-gray-900">
-                  <span>Total</span><span>NGN {subtotal.toLocaleString()}</span>
+                  <span>Total</span><span>{formatNaira(subtotal)}</span>
                 </div>
                 <button
                   type="submit"

@@ -10,9 +10,26 @@ import axios from 'axios';
  * - Production: Uses VITE_API_URL env var or fallback to production URL
  */
 const isDev = import.meta.env.DEV;
+const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim();
+
+const normalizeProductionApiUrl = (url) => {
+  // Default backend if env var is missing
+  if (!url) return 'https://backend-lumii.vercel.app';
+
+  // If someone set backend-lumii.vercel.app (without protocol), force HTTPS
+  if (!/^https?:\/\//i.test(url)) return `https://${url}`;
+
+  // Vercel domains should never be called over plain HTTP from production frontends
+  if (/^http:\/\/.+\.vercel\.app/i.test(url)) {
+    return url.replace(/^http:\/\//i, 'https://');
+  }
+
+  return url;
+};
+
 const API_BASE_URL = isDev
-  ? ''  // Empty baseURL - requests to /api/... get proxied by Vite
-  : (import.meta.env.VITE_API_URL || 'https://backend-lumii.vercel.app');
+  ? '' // Empty baseURL - requests to /api/... get proxied by Vite
+  : normalizeProductionApiUrl(rawApiUrl);
 
 // ------------------------
 // Axios instance
@@ -28,6 +45,9 @@ const api = axios.create({
 // ------------------------
 if (import.meta.env.DEV) {
   console.log('🚀 API mode: DEVELOPMENT (Using Vite Proxy)');
+  console.log('🔗 Base URL set to:', api.defaults.baseURL);
+} else {
+  console.log('🚀 API mode: PRODUCTION');
   console.log('🔗 Base URL set to:', api.defaults.baseURL);
 }
 
@@ -60,7 +80,7 @@ api.interceptors.response.use(
     // Network error (no response)
     if (!error.response) {
       error.customMessage =
-        'Network error. Is the backend running at localhost:5000?';
+        'Network error. Check that VITE_API_URL is a valid HTTPS backend URL and that your backend deployment is reachable.';
     } else {
       const status = error.response.status;
 

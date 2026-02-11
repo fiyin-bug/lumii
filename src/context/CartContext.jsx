@@ -1,6 +1,7 @@
 // src/context/CartContext.js
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
+import { parsePrice } from '../utils/price';
 
 const CartContext = createContext();
 
@@ -83,10 +84,8 @@ export const CartProvider = ({ children }) => {
 
   const getCartSubtotal = () => {
     return cartItems.reduce((total, item) => {
-      const price = typeof item.price === 'string'
-        ? parseFloat(item.price.replace(/[^0-9.-]+/g, ''))
-        : parseFloat(item.price);
-      if (!isNaN(price)) {
+      const price = parsePrice(item.price);
+      if (Number.isFinite(price)) {
         return total + price * item.quantity;
       }
       console.warn(`Invalid price for item ${item.id}: ${item.price}`);
