@@ -19,6 +19,23 @@ body {
   color: #2d231b;
 }
 
+.hero-title-reveal {
+  animation: heroTitleReveal 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes heroTitleReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.97);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
 ::selection {
   background: #ddccb8;
   color: #2b2118;

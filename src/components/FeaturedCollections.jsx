@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { allJewelryProducts } from '../data/Products';
@@ -7,36 +7,53 @@ const FeaturedCollections = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
-  // Select a diverse mix of products from different categories
-  const collections = [
-    // Necklaces - mix of different styles
-    allJewelryProducts.find(p => p.id === 1), // LPC 403.B
+  const pickByIds = (ids) =>
+    ids.map((id) => allJewelryProducts.find((p) => p.id === id)).filter(Boolean);
 
+  const tabCollections = useMemo(() => {
+    const latestPieces = pickByIds([1, 15, 24, 27, 35, 50, 54, 61]);
+    const newArrivals = [...allJewelryProducts]
+      .filter((item) => item.image || (item.images && item.images[0]))
+      .sort((a, b) => b.id - a.id)
+      .slice(0, 8);
+    const bestsellers = pickByIds([1, 5, 27, 35, 38, 61, 73, 81]);
 
-    // Nose Cuffs - new category
-    allJewelryProducts.find(p => p.id === 15), // LPC 501 A
-    allJewelryProducts.find(p => p.id === 24), // LPC 503 C
-
-    // Bracelets - new designs
-    allJewelryProducts.find(p => p.id === 27), // LPC 207 G
-    allJewelryProducts.find(p => p.id === 35), // LPC 325 GOLD
-
-    // Rings - mix
-    allJewelryProducts.find(p => p.id === 50), // Solitaire Diamond Ring
-    allJewelryProducts.find(p => p.id === 54), // Diamond Elegance Ring
-  ].filter(Boolean); // Remove any undefined items
+    return [latestPieces, newArrivals, bestsellers];
+  }, []);
 
   const [activeCategory, setActiveCategory] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const handleCategoryClick = (index) => setActiveCategory(index);
-  const nextSlide = () => setCurrentSlide((prev) => (prev === collections.length - 1 ? 0 : prev + 1));
-  const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? collections.length - 1 : prev - 1));
+  const collections = tabCollections[activeCategory] || [];
 
-  const getSlideWidth = () => {
-    if (window.innerWidth >= 1024) return 25; // 4 items on large screens
-    if (window.innerWidth >= 768) return 50;  // 2 items on tablets
-    return 50; // 2 items on mobile (changed from 100 to 50)
+  const getVisibleCards = () => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 1024) return 4;
+    return 2;
+  };
+
+  const getSlideStep = () => 100 / getVisibleCards();
+
+  const getMaxSlide = () => Math.max(collections.length - getVisibleCards(), 0);
+
+  const handleCategoryClick = (index) => {
+    setActiveCategory(index);
+    setCurrentSlide(0);
+  };
+
+  useEffect(() => {
+    const handleResize = () => setCurrentSlide(0);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const nextSlide = () => {
+    const maxSlide = getMaxSlide();
+    setCurrentSlide((prev) => (prev >= maxSlide ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    const maxSlide = getMaxSlide();
+    setCurrentSlide((prev) => (prev <= 0 ? maxSlide : prev - 1));
   };
 
   const handleAddToCart = (e, item) => {
@@ -78,47 +95,49 @@ const FeaturedCollections = () => {
         <div className="relative">
           <div className="overflow-hidden">
             <div
-              className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 w-[200%] md:w-[200%] lg:w-[100%] transition-transform duration-300"
-              style={{ transform: `translateX(-${currentSlide * getSlideWidth()}%)` }}
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${currentSlide * getSlideStep()}%)` }}
             >
               {collections.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-[#fffdfb] rounded-2xl shadow-[0_10px_30px_rgba(88,67,47,0.10)] overflow-hidden hover:shadow-[0_14px_40px_rgba(88,67,47,0.16)] transition-shadow duration-300 min-w-full md:min-w-[50%] lg:min-w-[25%] border border-[#eadfd2]"
+                  className="w-1/2 lg:w-1/4 flex-shrink-0 p-2 sm:p-3"
                 >
-                  <div className="h-64 overflow-hidden cursor-pointer" onClick={() => handleProductClick(item.id)}>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h3 className="text-lg font-medium text-[#3f342a] mb-1 flex-grow min-h-[3rem]">{item.name}</h3>
-                    <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{item.price}</p>
-                    <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:gap-2">
-                      <button
-                        onClick={(e) => handleAddToCart(e, item)}
-                        className="group relative flex-1 bg-gradient-to-r from-[#d5bd9f] to-[#8f7459] text-[#fff8f2] py-2.5 px-3 sm:px-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 overflow-hidden text-sm sm:text-base"
-                      >
-                        <span className="relative z-10 flex items-center justify-center gap-1 sm:gap-2">
-                          <span>Add to Cart</span>
-                          <svg className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                          </svg>
-                        </span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleProductClick(item.id);
-                        }}
-                        className="group relative flex-shrink-0 bg-gradient-to-br from-[#f8f1e8] to-[#e8d8c8] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[#cdb79f]/40 touch-manipulation"
-                      >
-                        <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover:scale-110 transition-transform duration-300 text-sm sm:text-base"></i>
-                        <div className="absolute inset-0 bg-gradient-to-br from-[var(--desert-sand)]/10 to-[var(--pinkish-brown)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-                      </button>
+                  <div className="bg-[#fffdfb] rounded-2xl shadow-[0_10px_30px_rgba(88,67,47,0.10)] overflow-hidden hover:shadow-[0_14px_40px_rgba(88,67,47,0.16)] transition-shadow duration-300 border border-[#eadfd2] h-full">
+                    <div className="h-64 overflow-hidden cursor-pointer" onClick={() => handleProductClick(item.id)}>
+                      <img
+                        src={item.image || (item.images && item.images[0])}
+                        alt={item.name}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+                      />
+                    </div>
+                    <div className="p-4 flex flex-col flex-grow">
+                      <h3 className="text-lg font-medium text-[#3f342a] mb-1 flex-grow min-h-[3rem]">{item.name}</h3>
+                      <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{item.price || 'Price on request'}</p>
+                      <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:gap-2">
+                        <button
+                          onClick={(e) => handleAddToCart(e, item)}
+                          className="group relative flex-1 bg-gradient-to-r from-[#d5bd9f] to-[#8f7459] text-[#fff8f2] py-2.5 px-3 sm:px-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 overflow-hidden text-sm sm:text-base"
+                        >
+                          <span className="relative z-10 flex items-center justify-center gap-1 sm:gap-2">
+                            <span>Add to Cart</span>
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                          </span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleProductClick(item.id);
+                          }}
+                          className="group relative flex-shrink-0 bg-gradient-to-br from-[#f8f1e8] to-[#e8d8c8] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[#cdb79f]/40 touch-manipulation"
+                        >
+                          <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover:scale-110 transition-transform duration-300 text-sm sm:text-base"></i>
+                          <div className="absolute inset-0 bg-gradient-to-br from-[var(--desert-sand)]/10 to-[var(--pinkish-brown)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

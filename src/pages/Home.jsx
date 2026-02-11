@@ -3,6 +3,7 @@ import Hero from "../components/Hero";
 import FeaturedCollections from "../components/FeaturedCollections";
 import Testimonials from "../components/Testimonials";
 import Newsletter from "../components/NewsLetter";
+import ChatbotWidget from "../components/ChatbotWidget";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <FeaturedCollections />
       <Testimonials />
       <Newsletter />
+      <ChatbotWidget />
     </div>
   );
 };

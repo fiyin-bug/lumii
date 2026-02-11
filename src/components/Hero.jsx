@@ -22,12 +22,9 @@ const Hero = () => {
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Hero Content */}
         <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#fff8f2] mb-5 drop-shadow-lg leading-tight">
+          <h1 className="hero-title-reveal text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#fff8f2] mb-5 drop-shadow-lg leading-tight">
             Lumis Pretty Collection
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-[#f7eee5] mb-9 drop-shadow-md max-w-3xl mx-auto leading-relaxed">
-            Timeless pieces crafted to elevate your everyday style with soft, refined elegance.
-          </p>
         </div>
 
         {/* Shop Now Button */}
