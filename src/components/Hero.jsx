@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
-const heroVideo = '/images/HERO/H I.MP4';
+const heroVideo = '/images/HERO/hero.mp4';
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -13,6 +13,7 @@ const Hero = () => {
       <video
         className="absolute inset-0 w-full h-full object-cover"
         src={heroVideo}
+        preload="auto"
         autoPlay
         muted
         loop
@@ -22,7 +23,7 @@ const Hero = () => {
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Hero Content */}
         <div className="text-center">
-          <h1 className="hero-title-reveal text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#fff8f2] mb-5 drop-shadow-lg leading-tight">
+          <h1 className="hero-title-reveal text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#fff8f2] mb-5 leading-tight">
             Lumis Pretty Collection
           </h1>
         </div>
