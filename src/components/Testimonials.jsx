@@ -62,11 +62,20 @@ const Testimonials = () => {
           <div className="mt-5 w-16 h-px mx-auto bg-[#ccb9a5]" />
         </header>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
-          {testimonials.map((item) => (
+          {testimonials.map((item, index) => (
             <article
               key={item.id}
-              className="group relative bg-[#fffdfa]/92 backdrop-blur-sm rounded-2xl p-6 md:p-7 shadow-[0_10px_28px_rgba(86,66,45,0.09)] border border-[#e8ddd4]/80 hover:shadow-[0_16px_42px_rgba(86,66,45,0.16)] hover:border-[#ceb79e]/70 transition-all duration-500"
+              className="group relative bg-[#fffdfa]/92 backdrop-blur-sm rounded-2xl p-6 md:p-7 shadow-[0_10px_28px_rgba(86,66,45,0.09)] border border-[#e8ddd4]/80 hover:shadow-[0_16px_42px_rgba(86,66,45,0.16)] hover:border-[#ceb79e]/70 transition-all duration-500 overflow-hidden"
             >
+              <div
+                className={`absolute inset-x-0 top-0 h-1.5 ${
+                  index % 3 === 0
+                    ? "bg-gradient-to-r from-[#b98b59] to-[#e5c395]"
+                    : index % 3 === 1
+                    ? "bg-gradient-to-r from-[#8c5e35] to-[#d2a676]"
+                    : "bg-gradient-to-r from-[#d8b286] to-[#9a6f43]"
+                }`}
+              />
               <div
                 className="absolute top-5 left-6 text-5xl font-serif text-[#8f7459]/20 select-none leading-none"
                 aria-hidden
@@ -76,11 +85,10 @@ const Testimonials = () => {
               <blockquote className="relative pl-2 text-[#5a4f44] text-[0.95rem] md:text-base leading-relaxed min-h-[4.5rem]">
                 {item.quote}
               </blockquote>
-              <footer className="mt-5 pt-4 border-t border-[#e8ddd4]/90 flex items-center justify-between">
+              <footer className="mt-5 pt-4 border-t border-[#e8ddd4]/90">
                 <cite className="not-italic font-serif font-semibold text-[#3f342a] text-lg">
                   {item.name}
                 </cite>
-                <span className="text-xs uppercase tracking-[0.18em] text-[#9d876f]">Verified Buyer</span>
               </footer>
             </article>
           ))}

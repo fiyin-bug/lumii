@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
-const heroVideo = '/images/HERO/H I.mp4';
+const heroVideo = '/images/HERO/H I.MP4';
 
 const Hero = () => {
   const navigate = useNavigate();
