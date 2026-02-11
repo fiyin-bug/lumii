@@ -1,35 +1,17 @@
 import axios from 'axios';
 
 // ------------------------
-// Backend URLs & Environment Logic
+// API URL Strategy
 // ------------------------
-
 /**
- * Dynamic API URL configuration:
- * - Development: Empty baseURL (requests made to /api/... get proxied by Vite)
- * - Production: Uses VITE_API_URL env var or fallback to production URL
+ * Always use relative /api routes from the browser:
+ * - Development: Vite proxy handles /api -> localhost backend
+ * - Production: Vercel rewrite handles /api -> backend-lumii.vercel.app
+ *
+ * This avoids direct browser TLS calls to backend domains that can trigger
+ * ERR_SSL_PROTOCOL_ERROR in some networks/devices.
  */
-const isDev = import.meta.env.DEV;
-const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim();
-
-const normalizeProductionApiUrl = (url) => {
-  // Default backend if env var is missing
-  if (!url) return 'https://backend-lumii.vercel.app';
-
-  // If someone set backend-lumii.vercel.app (without protocol), force HTTPS
-  if (!/^https?:\/\//i.test(url)) return `https://${url}`;
-
-  // Vercel domains should never be called over plain HTTP from production frontends
-  if (/^http:\/\/.+\.vercel\.app/i.test(url)) {
-    return url.replace(/^http:\/\//i, 'https://');
-  }
-
-  return url;
-};
-
-const API_BASE_URL = isDev
-  ? '' // Empty baseURL - requests to /api/... get proxied by Vite
-  : normalizeProductionApiUrl(rawApiUrl);
+const API_BASE_URL = '';
 
 // ------------------------
 // Axios instance
@@ -47,7 +29,7 @@ if (import.meta.env.DEV) {
   console.log('🚀 API mode: DEVELOPMENT (Using Vite Proxy)');
   console.log('🔗 Base URL set to:', api.defaults.baseURL);
 } else {
-  console.log('🚀 API mode: PRODUCTION');
+  console.log('🚀 API mode: PRODUCTION (Using Vercel rewrite /api -> backend)');
   console.log('🔗 Base URL set to:', api.defaults.baseURL);
 }
 
@@ -80,7 +62,7 @@ api.interceptors.response.use(
     // Network error (no response)
     if (!error.response) {
       error.customMessage =
-        'Network error. Check that VITE_API_URL is a valid HTTPS backend URL and that your backend deployment is reachable.';
+        'Network error. Please retry. If it persists, the API gateway or backend may be temporarily unreachable.';
     } else {
       const status = error.response.status;
 

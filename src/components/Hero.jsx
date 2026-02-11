@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 const heroVideo = '/images/HERO/hero.mp4';
+const heroPoster = '/images/One.jpg';
 
 const Hero = () => {
   const navigate = useNavigate();
+  const [videoFailed, setVideoFailed] = useState(false);
 
   const handleShopNowClick = () => {
     navigate('/jewelry');
   };
   return (
     <div className="relative pt-16 md:pt-20 min-h-[560px] md:min-h-[680px] flex items-center overflow-hidden">
-      <video
-        className="absolute inset-0 w-full h-full object-cover"
-        src={heroVideo}
-        preload="auto"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+      {!videoFailed ? (
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src={heroVideo}
+          poster={heroPoster}
+          preload="metadata"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onError={() => setVideoFailed(true)}
+        />
+      ) : (
+        <img
+          className="absolute inset-0 w-full h-full object-cover"
+          src={heroPoster}
+          alt="Lumis hero"
+          loading="eager"
+          decoding="async"
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-b from-[#1a120c]/35 via-[#2a1d13]/30 to-[#120c08]/55"></div>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Hero Content */}
