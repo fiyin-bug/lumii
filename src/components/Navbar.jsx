@@ -27,34 +27,34 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
-      <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 bg-[#fffaf4]/95 backdrop-blur-md shadow-[0_6px_24px_rgba(79,58,39,0.12)] z-50 border-b border-[#eadfce]">
+      <div className="container mx-auto px-6 py-3.5 flex items-center justify-between">
         {/* Logo/Brand Name */}
         <div className="flex items-center">
-         <Link to="/" className="text-xl md:text-2xl font-serif font-bold text-[var(--pinkish-brown)]">
+         <Link to="/" className="text-xl md:text-2xl font-serif font-bold text-[var(--pinkish-brown)] tracking-wide">
             Lumi Pretty Collection
           </Link>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex space-x-6 xl:space-x-8 items-center">
-          <NavLink to="/" className={({ isActive }) => isActive ? "text-[var(--pinkish-brown)]" : "text-gray-700 hover:text-[var(--pinkish-brown)]"} >
+          <NavLink to="/" className={({ isActive }) => isActive ? "text-[var(--pinkish-brown)]" : "text-[#5d5145] hover:text-[var(--pinkish-brown)]"} >
             Home
           </NavLink>
           {/* --- Jewelry Dropdown --- */}
           <div className="relative">
             <button
               onClick={toggleDropdown}
-              className="text-gray-700 hover:text-[var(--pinkish-brown)] transition-colors duration-300 flex items-center whitespace-nowrap"
+              className="text-[#5d5145] hover:text-[var(--pinkish-brown)] transition-colors duration-300 flex items-center whitespace-nowrap"
             >
               Jewelleries <i className={`fas fa-chevron-${isDropdownOpen ? 'up' : 'down'} ml-1 text-xs transition-transform`}></i>
             </button>
             {isDropdownOpen && (
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-10">
+              <div className="absolute top-full left-0 mt-2 w-48 bg-[#fffaf4] shadow-lg rounded-md py-2 z-10 border border-[#eadfce]">
                 {/* Link to main Jewelry page */}
                  <Link
                     to="/jewelry"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--pinkish-brown)] hover:text-white"
+                    className="block px-4 py-2 text-sm text-[#5d5145] hover:bg-[var(--pinkish-brown)] hover:text-white"
                     onClick={handleJewelryLinkClick} // Close dropdown on click
                   >
                     All Jewelry
@@ -63,7 +63,7 @@ const Navbar = () => {
                   <Link
                     key={item}
                     to={`/jewelry/${item.toLowerCase()}`} // Use category in URL
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--pinkish-brown)] hover:text-white"
+                    className="block px-4 py-2 text-sm text-[#5d5145] hover:bg-[var(--pinkish-brown)] hover:text-white"
                     onClick={handleJewelryLinkClick} // Close dropdown on click
                   >
                     {item}
@@ -73,24 +73,21 @@ const Navbar = () => {
             )}
           </div>
            {/* --- Other Links --- */}
-          <NavLink to="/luxury-hair" className={({ isActive }) => isActive ? "text-[var(--pinkish-brown)]" : "text-gray-700 hover:text-[var(--pinkish-brown)]"} >
-           Luxury Hair
-          </NavLink>
-           <NavLink to="/about" className={({ isActive }) => isActive ? "text-[var(--pinkish-brown)]" : "text-gray-700 hover:text-[var(--pinkish-brown)]"}>
+           <NavLink to="/about" className={({ isActive }) => isActive ? "text-[var(--pinkish-brown)]" : "text-[#5d5145] hover:text-[var(--pinkish-brown)]"}>
             About Us
           </NavLink>
-          <NavLink to="/contact" className={({ isActive }) => isActive ? "text-[var(--pinkish-brown)]" : "text-gray-700 hover:text-[var(--pinkish-brown)]"}>
+          <NavLink to="/contact" className={({ isActive }) => isActive ? "text-[var(--pinkish-brown)]" : "text-[#5d5145] hover:text-[var(--pinkish-brown)]"}>
             Contact Us
           </NavLink>
         </div>
 
         {/* Icons and Mobile Toggle */}
         <div className="flex items-center space-x-4">
-          <button className="text-gray-700 hover:text-[var(--pinkish-brown)] transition-colors duration-300">
+          <button className="text-[#5d5145] hover:text-[var(--pinkish-brown)] transition-colors duration-300">
             <i className="fas fa-search"></i>
           </button>
           {/* Cart Icon with Count */}
-          <Link to="/cart" className="relative text-gray-700 hover:text-[var(--pinkish-brown)] transition-colors duration-300">
+          <Link to="/cart" className="relative text-[#5d5145] hover:text-[var(--pinkish-brown)] transition-colors duration-300">
              <i className="fas fa-shopping-cart"></i>
              {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-[var(--pinkish-brown)] text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
@@ -100,7 +97,7 @@ const Navbar = () => {
           </Link>
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden text-gray-700 hover:text-[var(--pinkish-brown)] transition-colors duration-300"
+            className="lg:hidden text-[#5d5145] hover:text-[var(--pinkish-brown)] transition-colors duration-300"
             onClick={toggleMobileMenu}
           >
             <i className={`fas ${isMobileMenuOpen ? "fa-times" : "fa-bars"}`}></i>
@@ -110,7 +107,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white shadow-lg px-6 py-6 absolute top-full left-0 right-0 border-t border-gray-100">
+        <div className="lg:hidden bg-[#fffaf4] shadow-lg px-6 py-6 absolute top-full left-0 right-0 border-t border-[#eadfce]">
           <div className="flex flex-col space-y-6">
             <Link
               to="/"
@@ -151,13 +148,6 @@ const Navbar = () => {
             </div>
             {/* Other Mobile Links */}
             <div className="border-t border-gray-100 pt-4 space-y-4">
-              <Link
-                to="/luxury-hair"
-                className="block text-gray-700 hover:text-[var(--pinkish-brown)] py-2 text-lg font-medium touch-manipulation"
-                onClick={closeMobileMenu}
-              >
-                Luxury Hair
-              </Link>
               <Link
                 to="/about"
                 className="block text-gray-700 hover:text-[var(--pinkish-brown)] py-2 text-lg font-medium touch-manipulation"

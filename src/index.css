@@ -2,14 +2,26 @@
 
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
-/* Custom Color Scheme - Desert Sand & Pinkish Brown */
+/* Custom Color Scheme - Champagne Gold & Espresso */
 :root {
-  --desert-sand: #edc9af;
-  --pinkish-brown: #c27e79;
-  --desert-sand-light: #f5e6d8;
-  --pinkish-brown-light: #d4a59a;
-  --desert-sand-dark: #d4b495;
-  --pinkish-brown-dark: #a66a60;
+  --desert-sand: #e2c7a0;
+  --pinkish-brown: #9a6f43;
+  --desert-sand-light: #fbf4ea;
+  --pinkish-brown-light: #d7b690;
+  --desert-sand-dark: #c5a176;
+  --pinkish-brown-dark: #704a2d;
+  --cream: #fffaf3;
+  --espresso: #2f2116;
+}
+
+body {
+  background: radial-gradient(circle at top, #fff7ec 0%, #fffaf3 40%, #f7ecdf 100%);
+  color: #2d231b;
+}
+
+::selection {
+  background: #ddccb8;
+  color: #2b2118;
 }
 
 /* Mobile Optimizations */

@@ -26,7 +26,7 @@ const CartPage = () => {
     city: '',
     state: '',
     postalCode: '',
-    country: 'Nigeria',
+    country: '',
   });
   
   const [formErrors, setFormErrors] = useState({});
@@ -54,6 +54,7 @@ const CartPage = () => {
     if (!formData.city.trim()) errors.city = 'City is required';
     if (!formData.state.trim()) errors.state = 'State is required';
     if (!formData.postalCode.trim()) errors.postalCode = 'Postal code is required';
+    if (!formData.country.trim()) errors.country = 'Country is required';
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -197,7 +198,17 @@ const CartPage = () => {
                   <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.city ? 'border-red-500' : ''}`} />
                   <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.state ? 'border-red-500' : ''}`} />
                   <input type="text" name="postalCode" placeholder="Postal Code" value={formData.postalCode} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.postalCode ? 'border-red-500' : ''}`} />
-                  <input type="text" name="country" value={formData.country} readOnly className="p-2 border rounded bg-gray-100 text-gray-500" />
+                  <div className="flex flex-col">
+                    <input
+                      type="text"
+                      name="country"
+                      placeholder="Country"
+                      value={formData.country}
+                      onChange={handleInputChange}
+                      className={`p-2 border rounded ${formErrors.country ? 'border-red-500' : ''}`}
+                    />
+                    {formErrors.country && <span className="text-xs text-red-500 mt-1">{formErrors.country}</span>}
+                  </div>
                 </div>
               </div>
             </div>

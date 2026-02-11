@@ -1,88 +1,109 @@
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
+const values = [
+  {
+    title: "Crafted Elegance",
+    description:
+      "Every design is carefully selected to feel timeless, refined, and effortlessly beautiful.",
+  },
+  {
+    title: "Premium Quality",
+    description:
+      "From finish to fit, we focus on quality pieces that look luxurious and wear comfortably.",
+  },
+  {
+    title: "Modern Femininity",
+    description:
+      "Our collections are made for women who love soft luxury and confident everyday styling.",
+  },
+];
+
 const AboutUs = () => {
-  const containerVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        delay: 0.2,
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 20,
-      },
-    },
-  };
-
   return (
-    <div className="bg-gradient-to-br from-pink-50 via-white to-rose-50 min-h-screen flex items-center justify-center px-4 py-12">
-      <motion.div
-        className="bg-white rounded-xl p-8 max-w-4xl w-full relative z-10 border border-pink-200 shadow-lg"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.h1
-          className="text-5xl font-bold text-center text-[#f4b8da] mb-8"
-          style={{ fontFamily: 'Dakota, serif' }}
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    <section className="min-h-screen px-4 py-16 md:py-20 bg-gradient-to-b from-[#fff7ed] via-[#fffaf4] to-[#f4e6d6]">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12 md:mb-16"
         >
-          About Lumi Pretty Collection
-        </motion.h1>
-
-        <motion.p
-          className="text-[#f4b8da] text-center mb-8 text-xl"
-          style={{ fontFamily: 'Dakota, serif' }}
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 20 }}
-        >
-          Discover the story behind our exquisite jewelry collection.
-        </motion.p>
-
-        <motion.div className="space-y-6 text-[#f4b8da] text-lg" style={{ fontFamily: 'Dakota, serif' }} variants={itemVariants}>
-          <motion.p variants={itemVariants}>
-            At Lumi Pretty Collection, we believe that every piece of jewelry tells a story. Our passion for beauty and craftsmanship drives us to curate a collection that celebrates elegance, style, and individuality.
-          </motion.p>
-
-          <motion.p variants={itemVariants}>
-            Founded with the vision to make luxury accessible, we source the finest materials and work with skilled artisans to create pieces that not only look stunning but also stand the test of time.
-          </motion.p>
-
-          <motion.p variants={itemVariants}>
-            From delicate rings that sparkle with every movement to bold bracelets that make a statement, our collection offers something for every occasion and personal style. Whether you're looking for the perfect engagement ring, a meaningful gift, or simply a treat for yourself, Lumi Pretty Collection has you covered.
-          </motion.p>
-
-          <motion.p variants={itemVariants}>
-            We are committed to quality, sustainability, and customer satisfaction. Each piece is carefully inspected to ensure it meets our high standards, and we stand behind our products with excellent customer service.
-          </motion.p>
-
-          <motion.p variants={itemVariants}>
-            Thank you for choosing Lumi Pretty Collection. We hope our jewelry brings joy and confidence to your life.
-          </motion.p>
+          <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-[var(--pinkish-brown)] mb-4">
+            Our Story
+          </p>
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-[var(--espresso)] mb-5 leading-tight">
+            About Lumis Pretty Collection
+          </h1>
+          <p className="max-w-3xl mx-auto text-[#5c4b3d] text-base md:text-lg leading-relaxed">
+            We are a jewelry brand built on soft sophistication — creating elevated pieces that
+            bring confidence, grace, and quiet glamour into everyday life.
+          </p>
         </motion.div>
 
-        <motion.div className="mt-12 text-center" variants={itemVariants}>
-          <p className="text-[#f4b8da] text-lg" style={{ fontFamily: 'Dakota, serif' }}>Shine bright with Lumi Pretty Collection!</p>
-        </motion.div>
-      </motion.div>
-    </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-stretch mb-12 md:mb-16">
+          <motion.article
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55 }}
+            className="bg-[#fffdf9] border border-[#ead9c5] rounded-3xl p-7 md:p-10 shadow-[0_14px_42px_rgba(86,61,35,0.12)]"
+          >
+            <h2 className="text-2xl md:text-3xl font-serif text-[var(--espresso)] mb-5">Who We Are</h2>
+            <div className="space-y-4 text-[#5f4d3e] leading-relaxed">
+              <p>
+                Lumis Pretty Collection started with one clear mission: make premium jewelry feel
+                personal, wearable, and unforgettable.
+              </p>
+              <p>
+                We believe luxury should feel effortless. Whether you are dressing for a special
+                event or elevating a simple outfit, our pieces are designed to bring polish and
+                confidence without trying too hard.
+              </p>
+              <p>
+                Our collections celebrate timeless silhouettes, feminine details, and modern
+                elegance — so your jewelry always feels like you.
+              </p>
+            </div>
+          </motion.article>
+
+          <motion.article
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55 }}
+            className="bg-gradient-to-br from-[#f2dfc8] via-[#e7c8a1] to-[#b98b59] text-[#2c1f14] rounded-3xl p-7 md:p-10 shadow-[0_14px_42px_rgba(86,61,35,0.2)]"
+          >
+            <p className="text-xs uppercase tracking-[0.25em] text-[#5f3d22] mb-4">Brand Promise</p>
+            <h3 className="text-2xl md:text-3xl font-serif font-semibold mb-5">Luxury You Can Live In</h3>
+            <p className="leading-relaxed text-[#3a291b] mb-6">
+              We obsess over details, quality, and presentation — because true luxury is in how a
+              piece looks, feels, and lasts over time.
+            </p>
+            <div className="h-px w-full bg-[#7f5a38]/30 mb-6" />
+            <p className="text-[#3a291b] leading-relaxed">
+              Thank you for choosing Lumis Pretty Collection. We are honored to be part of your
+              style story.
+            </p>
+          </motion.article>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {values.map((item, index) => (
+            <motion.article
+              key={item.title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              className="bg-[#fffaf4] border border-[#e4d1bc] rounded-2xl p-6 shadow-[0_10px_28px_rgba(84,60,34,0.09)]"
+            >
+              <h4 className="font-serif text-xl text-[var(--espresso)] mb-2">{item.title}</h4>
+              <p className="text-[#5e4d3e] leading-relaxed">{item.description}</p>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 

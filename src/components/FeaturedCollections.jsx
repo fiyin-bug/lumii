@@ -49,25 +49,26 @@ const FeaturedCollections = () => {
   };
 
   return (
-    <div className="py-16 bg-gradient-to-br from-[var(--desert-sand-light)] via-white to-[var(--pinkish-brown-light)] relative overflow-hidden">
+    <div className="py-20 bg-gradient-to-br from-[#f7f1ea] via-[#fdfaf6] to-[#efe5da] relative overflow-hidden">
       <div className="absolute inset-0 opacity-5" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='var(--pinkish-brown)' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         backgroundSize: '60px 60px'
       }}></div>
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-serif font-bold text-gray-800 mb-2">Featured Collections</h2>
-          <p className="text-gray-600">Discover our most loved pieces</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-[var(--pinkish-brown)] mb-3">Curated Selection</p>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-[var(--espresso)] mb-2">Featured Collections</h2>
+          <p className="text-[#6d6258]">Discover our most loved pieces, handpicked for elegance.</p>
         </div>
         <div className="flex justify-center mb-8">
-          <div className="inline-flex rounded-md shadow-sm">
+          <div className="inline-flex rounded-full shadow-sm border border-[#d8c7b5] bg-[#fffaf5] p-1">
             {['Latest Pieces', 'New Arrivals', 'Bestsellers'].map((cat, index) => (
               <button
                 key={index}
                 onClick={() => handleCategoryClick(index)}
-                className={`px-4 py-2 text-sm font-medium ${
-                  activeCategory === index ? 'bg-[var(--pinkish-brown)] text-white' : 'bg-white text-gray-700'
-                } border border-[var(--pinkish-brown)] ${index === 0 ? 'rounded-l-lg' : index === 2 ? 'rounded-r-lg' : 'border-t border-b'} hover:bg-[var(--pinkish-brown)] hover:text-white transition-colors duration-300`}
+                className={`px-4 py-2 text-sm font-medium rounded-full ${
+                  activeCategory === index ? 'bg-[var(--pinkish-brown)] text-[#fff8ef]' : 'bg-transparent text-[#62564b]'
+                } transition-colors duration-300`}
               >
                 {cat}
               </button>
@@ -83,7 +84,7 @@ const FeaturedCollections = () => {
               {collections.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 min-w-full md:min-w-[50%] lg:min-w-[25%]"
+                  className="bg-[#fffdfb] rounded-2xl shadow-[0_10px_30px_rgba(88,67,47,0.10)] overflow-hidden hover:shadow-[0_14px_40px_rgba(88,67,47,0.16)] transition-shadow duration-300 min-w-full md:min-w-[50%] lg:min-w-[25%] border border-[#eadfd2]"
                 >
                   <div className="h-64 overflow-hidden cursor-pointer" onClick={() => handleProductClick(item.id)}>
                     <img
@@ -93,12 +94,12 @@ const FeaturedCollections = () => {
                     />
                   </div>
                   <div className="p-4 flex flex-col flex-grow">
-                    <h3 className="text-lg font-medium text-gray-800 mb-1 flex-grow min-h-[3rem]">{item.name}</h3>
+                    <h3 className="text-lg font-medium text-[#3f342a] mb-1 flex-grow min-h-[3rem]">{item.name}</h3>
                     <p className="text-[var(--pinkish-brown)] font-bold mt-1 mb-3 text-xl">{item.price}</p>
                     <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:gap-2">
                       <button
                         onClick={(e) => handleAddToCart(e, item)}
-                        className="group relative flex-1 bg-gradient-to-r from-[var(--desert-sand)] to-[var(--pinkish-brown)] text-white py-2.5 px-3 sm:px-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 overflow-hidden text-sm sm:text-base"
+                        className="group relative flex-1 bg-gradient-to-r from-[#d5bd9f] to-[#8f7459] text-[#fff8f2] py-2.5 px-3 sm:px-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 overflow-hidden text-sm sm:text-base"
                       >
                         <span className="relative z-10 flex items-center justify-center gap-1 sm:gap-2">
                           <span>Add to Cart</span>
@@ -113,7 +114,7 @@ const FeaturedCollections = () => {
                           e.stopPropagation();
                           handleProductClick(item.id);
                         }}
-                        className="group relative flex-shrink-0 bg-gradient-to-br from-[var(--desert-sand-light)] to-[var(--pinkish-brown-light)] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[var(--pinkish-brown)]/20 touch-manipulation"
+                        className="group relative flex-shrink-0 bg-gradient-to-br from-[#f8f1e8] to-[#e8d8c8] p-2.5 rounded-lg hover:shadow-md transform hover:scale-110 transition-all duration-300 border border-[#cdb79f]/40 touch-manipulation"
                       >
                         <i className="fas fa-eye text-[var(--pinkish-brown)] group-hover:scale-110 transition-transform duration-300 text-sm sm:text-base"></i>
                         <div className="absolute inset-0 bg-gradient-to-br from-[var(--desert-sand)]/10 to-[var(--pinkish-brown)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
@@ -126,13 +127,13 @@ const FeaturedCollections = () => {
           </div>
           <button
             onClick={prevSlide}
-            className="absolute top-1/2 left-2 -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-all duration-300 touch-manipulation z-10"
+            className="absolute top-1/2 left-2 -translate-y-1/2 bg-[#fffaf5] w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-[#fffaf2] transition-all duration-300 touch-manipulation z-10 border border-[#dbcab8]"
           >
             <i className="fas fa-chevron-left text-lg"></i>
           </button>
           <button
             onClick={nextSlide}
-            className="absolute top-1/2 right-2 -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-white transition-all duration-300 touch-manipulation z-10"
+            className="absolute top-1/2 right-2 -translate-y-1/2 bg-[#fffaf5] w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-[var(--pinkish-brown)] hover:bg-[var(--pinkish-brown)] hover:text-[#fffaf2] transition-all duration-300 touch-manipulation z-10 border border-[#dbcab8]"
           >
             <i className="fas fa-chevron-right text-lg"></i>
           </button>
