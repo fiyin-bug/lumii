@@ -17,8 +17,8 @@ const contactCards = [
   {
     icon: Instagram,
     label: "Instagram",
-    value: "@peczys.c",
-    href: "https://www.instagram.com/peczys.c",
+    value: "@lumiscollectionn",
+    href: "https://www.instagram.com/lumiscollectionn?igsh=MW5udDF5NDh2anM3dA==",
   },
   {
     icon: MapPin,

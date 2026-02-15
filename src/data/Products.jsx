@@ -1,6 +1,30 @@
 // src/data/products.js
 
-export const allJewelryProducts = [
+const parseRawPrice = (value) => {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  if (typeof value !== 'string') return 0;
+
+  const cleaned = value.replace(/[^0-9.]/g, '');
+  const parsed = parseFloat(cleaned);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const formatNairaPrice = (amount) => `₦${Math.round(amount).toLocaleString('en-NG')}`;
+
+const applyUpdatedPricing = (rawPrice) => {
+  const originalPrice = parseRawPrice(rawPrice);
+
+  // Keep business rule explicit:
+  // 1) Anything below ₦2,000 should be treated as ₦6,000 baseline.
+  // 2) Add ₦500 to all product prices.
+  const normalizedBasePrice = originalPrice > 0
+    ? (originalPrice < 2000 ? 6000 : originalPrice)
+    : 6000;
+
+  return formatNairaPrice(normalizedBasePrice + 500);
+};
+
+const rawJewelryProducts = [
    // Necklaces (14)
    { id: 1, name: "LPC 403.B",price:"₦ 18,000", image: "/images/Necklaces/LPC 403.B.jpg", category: "Necklaces" },
    { id: 2, name: "LPC 404", price: "₦15,000", image: "/images/Necklaces/LPC 404.jpg", category: "Necklaces" },
@@ -118,3 +142,8 @@ export const allJewelryProducts = [
    { id: 103, name: "LPC 809", price: "4500", image: "/images/Anklets/LPC 809.jpg", category: "Anklets" },
 
 ];
+
+export const allJewelryProducts = rawJewelryProducts.map((product) => ({
+  ...product,
+  price: applyUpdatedPricing(product.price),
+}));

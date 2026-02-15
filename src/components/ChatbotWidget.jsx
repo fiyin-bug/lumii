@@ -114,7 +114,7 @@ const ChatbotWidget = () => {
         text: "Sure — here’s the fastest way to reach us directly:",
         links: [
           { label: "Contact Page", path: "/contact" },
-          { label: "Instagram", path: "https://www.instagram.com/peczys.c", external: true },
+          { label: "Instagram", path: "https://www.instagram.com/lumiscollectionn?igsh=MW5udDF5NDh2anM3dA==", external: true },
         ],
       };
     }

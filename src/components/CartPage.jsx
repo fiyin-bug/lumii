@@ -32,6 +32,16 @@ const CartPage = () => {
   
   const [formErrors, setFormErrors] = useState({});
 
+  const inputBaseClass =
+    'w-full p-3 border rounded-lg outline-none transition-all duration-200 bg-white placeholder:text-gray-400';
+
+  const getInputClass = (fieldName) =>
+    `${inputBaseClass} ${
+      formErrors[fieldName]
+        ? 'border-[#e39bbf] bg-[#fff4fa] focus:border-[#d486ad] focus:ring-2 focus:ring-[#f4b8da]/40'
+        : 'border-[var(--pinkish-brown)]/20 focus:border-[var(--pinkish-brown)] focus:ring-2 focus:ring-[var(--desert-sand)]/40 hover:border-[var(--pinkish-brown)]/40'
+    }`;
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -106,6 +116,7 @@ const CartPage = () => {
 
     try {
       const response = await api.post('/api/payment/initialize', payload);
+
       toast.dismiss(loadingToastId);
 
       if (response.data?.success && response.data?.authorizationUrl) {
@@ -117,7 +128,7 @@ const CartPage = () => {
     } catch (error) {
       toast.dismiss(loadingToastId);
       console.error('Checkout Error:', error.response?.data || error.message);
-      const msg = error.response?.data?.message || 'Payment server error. Please try again.';
+      const msg = error.response?.data?.message || 'Payment server error. Please try again. If this persists, refresh and retry in 30 seconds.';
       toast.error(msg);
     }
   };
@@ -143,7 +154,7 @@ const CartPage = () => {
             <div className="xl:col-span-2 space-y-6">
               
               {/* Item Review Section */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
+              <div className="bg-white rounded-lg shadow-sm border border-[var(--pinkish-brown)]/15 p-6">
                 <h2 className="text-xl font-semibold mb-4 border-b pb-2">Review Items</h2>
                 <div className="space-y-4">
                   {cartItems.map((item, index) => (
@@ -177,23 +188,23 @@ const CartPage = () => {
               </div>
 
               {/* Shipping Form Section */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
+              <div className="bg-white rounded-lg shadow-sm border border-[var(--pinkish-brown)]/15 p-6">
                 <h2 className="text-xl font-semibold mb-4 border-b pb-2">Shipping Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col">
-                    <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.firstName ? 'border-red-500' : ''}`} />
+                    <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleInputChange} className={getInputClass('firstName')} />
                     {formErrors.firstName && <span className="text-xs text-red-500 mt-1">{formErrors.firstName}</span>}
                   </div>
                   <div className="flex flex-col">
-                    <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.lastName ? 'border-red-500' : ''}`} />
+                    <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleInputChange} className={getInputClass('lastName')} />
                     {formErrors.lastName && <span className="text-xs text-red-500 mt-1">{formErrors.lastName}</span>}
                   </div>
-                  <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleInputChange} className={`p-2 border rounded md:col-span-2 ${formErrors.email ? 'border-red-500' : ''}`} />
-                  <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleInputChange} className={`p-2 border rounded md:col-span-2 ${formErrors.phone ? 'border-red-500' : ''}`} />
-                  <input type="text" name="street" placeholder="Street Address" value={formData.street} onChange={handleInputChange} className={`p-2 border rounded md:col-span-2 ${formErrors.street ? 'border-red-500' : ''}`} />
-                  <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.city ? 'border-red-500' : ''}`} />
-                  <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.state ? 'border-red-500' : ''}`} />
-                  <input type="text" name="postalCode" placeholder="Postal Code" value={formData.postalCode} onChange={handleInputChange} className={`p-2 border rounded ${formErrors.postalCode ? 'border-red-500' : ''}`} />
+                  <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleInputChange} className={`${getInputClass('email')} md:col-span-2`} />
+                  <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleInputChange} className={`${getInputClass('phone')} md:col-span-2`} />
+                  <input type="text" name="street" placeholder="Street Address" value={formData.street} onChange={handleInputChange} className={`${getInputClass('street')} md:col-span-2`} />
+                  <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleInputChange} className={getInputClass('city')} />
+                  <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleInputChange} className={getInputClass('state')} />
+                  <input type="text" name="postalCode" placeholder="Postal Code" value={formData.postalCode} onChange={handleInputChange} className={getInputClass('postalCode')} />
                   <div className="flex flex-col">
                     <input
                       type="text"
@@ -201,7 +212,7 @@ const CartPage = () => {
                       placeholder="Country"
                       value={formData.country}
                       onChange={handleInputChange}
-                      className={`p-2 border rounded ${formErrors.country ? 'border-red-500' : ''}`}
+                      className={getInputClass('country')}
                     />
                     {formErrors.country && <span className="text-xs text-red-500 mt-1">{formErrors.country}</span>}
                   </div>
@@ -211,7 +222,7 @@ const CartPage = () => {
 
             {/* Sticky Summary Sidebar */}
             <div className="xl:col-span-1">
-              <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-24">
+              <div className="bg-white rounded-lg shadow-sm border border-[var(--pinkish-brown)]/15 p-6 sticky top-24">
                 <h2 className="text-xl font-semibold mb-4 border-b pb-2">Order Summary</h2>
                 <div className="flex justify-between mb-2"><span>Subtotal</span><span>{formatNaira(subtotal)}</span></div>
                 <div className="flex justify-between mb-4 text-green-600"><span>Shipping</span><span>FREE</span></div>
@@ -222,7 +233,7 @@ const CartPage = () => {
                   type="submit"
                   className="w-full bg-amber-800 text-white py-4 rounded-xl font-bold hover:bg-amber-900 transition-all shadow-md active:transform active:scale-95"
                 >
-                  Pay with Paystack
+                  Make Payment
                 </button>
                 <p className="text-[10px] text-gray-400 mt-4 text-center">
                   Secure checkout powered by Paystack.

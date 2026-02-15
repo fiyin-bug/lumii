@@ -18,6 +18,7 @@ const PaymentCallback = () => {
         try {
           console.log(`Verifying payment for reference: ${reference}`);
           const response = await api.get(`/api/payment/verify/${reference}`);
+
           console.log('API response:', response.data);
           setIsVerifying(false);
           setHasVerified(true);

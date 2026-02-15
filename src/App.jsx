@@ -23,16 +23,29 @@ const App = () => {
           reverseOrder={false}
           toastOptions={{
             className: '',
-            duration: 3000,
-            style: { background: '#363636', color: '#fff' },
+            duration: 3500,
+            style: {
+              background: '#fff7fb',
+              color: '#7a2e56',
+              border: '1px solid #f4b8da',
+              boxShadow: '0 10px 25px rgba(122, 46, 86, 0.12)',
+            },
             success: {
               duration: 3000,
-              theme: { primary: '#f4b8da', secondary: 'black' },
+              theme: { primary: '#f4b8da', secondary: '#7a2e56' },
               iconTheme: { primary: '#f4b8da', secondary: '#fff' },
-              style: { background: '#fff0f6', color: '#9d174d', border: '1px solid #f4b8da' },
+              style: {
+                background: '#fff0f8',
+                color: '#8f2f61',
+                border: '1px solid #e8a7ca',
+              },
             },
             error: {
-              style: { background: '#fef2f2', color: '#b91c1c', border: '1px solid #fecaca' },
+              style: {
+                background: '#fff2f8',
+                color: '#9f2c5f',
+                border: '1px solid #f2b3d3',
+              },
             },
           }}
         />
