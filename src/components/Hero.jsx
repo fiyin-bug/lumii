@@ -1,38 +1,119 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+
 const heroVideo = '/images/HERO/hero.mp4';
 const heroPoster = '/images/One.jpg';
+const HERO_VIDEO_TIMEOUT_MS = 9000;
 
 const Hero = () => {
   const navigate = useNavigate();
+  const videoRef = useRef(null);
+
+  // Video state:
+  // - videoReady: first frame or playback is available
+  // - videoFailed: hard failure, keep poster only
+  // - requiresUserPlay: autoplay blocked on some devices (e.g. low power mode)
   const [videoFailed, setVideoFailed] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
+  const [requiresUserPlay, setRequiresUserPlay] = useState(false);
+
+  const tryPlayVideo = useCallback(async (fromUserGesture = false) => {
+    const video = videoRef.current;
+    if (!video || videoFailed) return;
+
+    try {
+      // Explicitly force muted inline playback for iOS/Safari compatibility.
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+
+      const playAttempt = video.play();
+      if (playAttempt && typeof playAttempt.then === 'function') {
+        await playAttempt;
+      }
+
+      setVideoReady(true);
+      setRequiresUserPlay(false);
+    } catch {
+      // Autoplay can be blocked on some devices/network modes.
+      // Keep poster visible and show a manual play affordance.
+      if (fromUserGesture) {
+        setVideoFailed(true);
+      } else {
+        setRequiresUserPlay(true);
+      }
+    }
+  }, [videoFailed]);
+
+  useEffect(() => {
+    if (videoFailed) return undefined;
+
+    const timeoutId = window.setTimeout(() => {
+      // Only hard-fail when video is neither ready nor waiting on user gesture.
+      if (!videoReady && !requiresUserPlay) {
+        setVideoFailed(true);
+      }
+    }, HERO_VIDEO_TIMEOUT_MS);
+
+    // Kick off playback attempt on mount.
+    void tryPlayVideo(false);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [videoFailed, videoReady, requiresUserPlay, tryPlayVideo]);
 
   const handleShopNowClick = () => {
     navigate('/jewelry');
   };
+
   return (
     <div className="relative pt-16 md:pt-20 min-h-[560px] md:min-h-[680px] flex items-center overflow-hidden">
-      {!videoFailed ? (
+      {/* Poster/base image is always rendered for instant paint and fallback. */}
+      <img
+        className="absolute inset-0 w-full h-full object-cover"
+        src={heroPoster}
+        alt="Lumis hero"
+        loading="eager"
+        decoding="async"
+      />
+
+      {!videoFailed && (
         <video
-          className="absolute inset-0 w-full h-full object-cover"
-          src={heroVideo}
-          poster={heroPoster}
-          preload="metadata"
+          ref={videoRef}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${videoReady ? 'opacity-100' : 'opacity-0'}`}
+          preload="auto"
           autoPlay
           muted
+          defaultMuted
           loop
           playsInline
+          onLoadedData={() => setVideoReady(true)}
+          onPlaying={() => setVideoReady(true)}
+          onCanPlay={() => {
+            if (!videoReady) {
+              void tryPlayVideo(false);
+            }
+          }}
           onError={() => setVideoFailed(true)}
-        />
-      ) : (
-        <img
-          className="absolute inset-0 w-full h-full object-cover"
-          src={heroPoster}
-          alt="Lumis hero"
-          loading="eager"
-          decoding="async"
-        />
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
       )}
+
+      {requiresUserPlay && !videoFailed && (
+        <button
+          type="button"
+          onClick={() => {
+            void tryPlayVideo(true);
+          }}
+          className="absolute bottom-5 right-5 z-20 px-4 py-2 rounded-full bg-[#2b1f17]/70 backdrop-blur-sm border border-white/40 text-white text-sm font-medium hover:bg-[#2b1f17]/85 transition-colors"
+          aria-label="Play hero video"
+        >
+          Tap to play video
+        </button>
+      )}
+
       <div className="absolute inset-0 bg-gradient-to-b from-[#1a120c]/35 via-[#2a1d13]/30 to-[#120c08]/55"></div>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Hero Content */}
