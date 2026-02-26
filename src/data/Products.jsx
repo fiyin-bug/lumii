@@ -42,7 +42,7 @@ const rawJewelryProducts = [
    { id: 14, name: "LPC 409", price: "₦6,000", image: "/images/Necklaces/LPC 409.jpg", category: "Necklaces" },
 
    // Nose Cuffs (12)
-   { id: 15, name: "LPC 501 A", price: "₦1200", image: "/images/Nose Cuffs/LPC 501 A.jpg", category: "Nose Cuffs" },
+   { id: 15, name: "LPC 501 A", price: "₦100", image: "/images/Nose Cuffs/LPC 501 A.jpg", category: "Nose Cuffs" },
    { id: 16, name: "LPC 501 B", price: "₦1200", image: "/images/Nose Cuffs/LPC 501 B.jpg", category: "Nose Cuffs" },
    { id: 17, name: "LPC 501 D", price: "₦1200", image: "/images/Nose Cuffs/LPC 501 D.jpg", category: "Nose Cuffs" },
    { id: 18, name: "LPC 501 F", price: "₦1200", image: "/images/Nose Cuffs/LPC 501 F.jpg", category: "Nose Cuffs" },
